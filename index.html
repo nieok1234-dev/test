@@ -1,202 +1,354 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<title>Dla Ciebie ❤️</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Walentynki 💖</title>
 <style>
-body {
-    margin:0;
-    overflow:hidden;
-    background:pink;
-    font-family:'Comic Sans MS', cursive;
-}
-.page {
-    position:absolute;
-    inset:0;
-    display:none;
-}
-.page.active { display:block; }
-
-.center-box {
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    text-align:center;
-    color:white;
-    transition:0.5s ease;
-}
-.heart-box {
-    width:120px;
-    height:120px;
-    background:red;
-    border-radius:50%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    cursor:pointer;
-    font-size:22px;
-    transition:0.4s;
-}
-
-button {
-    margin-top:10px;
-    padding:10px 18px;
-    border:none;
-    border-radius:12px;
-    font-size:16px;
-    cursor:pointer;
-}
-.green {background:green;}
-.red {background:red;color:white;}
-
-.falling {position:absolute;top:-50px;animation:fall linear infinite;opacity:0.8;}
-@keyframes fall {to {transform:translateY(110vh);}}
-
-.flower {position:absolute;font-size:30px;animation:float 6s ease-in-out infinite;}
-@keyframes float{50%{transform:translateY(-10px);}}
-
-#finalMessage {font-size:50px; transition:0.3s;text-align:center;}
-#fireworks {position:absolute;inset:0;display:none;justify-content:center;align-items:center;pointer-events:none;}
+  :root{
+    --bg1: linear-gradient(135deg,#ff758c,#ff7eb3);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;height:100vh;overflow:hidden;background:var(--bg1);font-family:"Comic Sans MS",cursive,Arial}
+  .page{position:absolute;inset:0;display:none}
+  .page.active{display:block}
+  /* central boxes */
+  .center-wrap{position:relative;z-index:20;height:100%;display:flex;align-items:center;justify-content:center}
+  .heart-center{
+    width:150px;height:150px;border-radius:50%;background:#e33;color:#fff;display:flex;
+    align-items:center;justify-content:center;flex-direction:column;font-weight:700;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);cursor:pointer;transition:all .45s ease;
+    transform:translateZ(0);
+  }
+  .heart-center.small{width:120px;height:120px;font-size:14px}
+  .heart-text{font-size:20px;line-height:1}
+  .subtext{font-size:13px;margin-top:6px;color:#fff;opacity:.95}
+  .btn-inline{margin-top:10px;padding:8px 12px;border-radius:10px;border:none;cursor:pointer}
+  .btn-green{background:#2fbf4f;color:#fff}
+  .btn-red{background:#e63946;color:#fff}
+  /* falling elements (over pages) */
+  .fall-layer{position:absolute;inset:0;pointer-events:none;z-index:5;overflow:hidden}
+  .fall{
+    position:absolute;top:-80px;pointer-events:none;user-select:none;
+    animation:fall linear forwards;opacity:0.95;will-change:transform,opacity;
+    text-shadow:0 2px 6px rgba(0,0,0,0.2)
+  }
+  @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
+  /* flowers (paint-like) */
+  .flower{position:absolute;z-index:6;pointer-events:none;opacity:.95}
+  .flower.seed{font-size:22px}
+  /* small helper for messages inside heart */
+  .msg-in-heart{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#fff;text-align:center;font-weight:700}
+  /* final full-screen TAK */
+  .full-tak{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;
+    background:rgba(255,20,80,0.95);z-index:9999;color:#fff;font-weight:900;font-size:8vw}
+  /* fireworks container and cat gif */
+  .effects{position:fixed;inset:0;pointer-events:none;z-index:900;display:flex;justify-content:center;align-items:center}
+  .cat-gif{position:fixed;right:12px;bottom:12px;width:220px;height:auto;z-index:10000;pointer-events:none}
 </style>
 </head>
 <body>
 
-<div id="page1" class="page active"></div>
-<div id="page2" class="page"></div>
-<div id="page3" class="page"></div>
-<div id="fireworks"></div>
+<!-- PAGES -->
+<div id="p1" class="page active">
+  <div class="fall-layer" id="fall1"></div>
+  <div class="center-wrap">
+    <div id="heart1" class="heart-center" title="Kliknij">
+      <div class="heart-text">❤️</div>
+      <div class="subtext">Przygotowałem coś dla Ciebie</div>
+    </div>
+  </div>
+  <div id="flowers1"></div>
+</div>
+
+<div id="p2" class="page">
+  <div class="fall-layer" id="fall2"></div>
+  <div class="center-wrap">
+    <div id="magicHeart" class="heart-center small" style="position:relative;">
+      <div id="mhText" class="heart-text">Jeszcze nie tu...</div>
+      <div id="mhSub" class="subtext" style="font-size:12px">Teraz tutaj</div>
+    </div>
+  </div>
+  <div id="flowers2"></div>
+</div>
+
+<div id="p3" class="page">
+  <div class="fall-layer" id="fall3"></div>
+  <div class="center-wrap">
+    <div style="text-align:center;z-index:20">
+      <div id="finalQ" style="color:#fff;font-size:28px;font-weight:800;margin-bottom:12px">Czy zostaniesz moją walentynką?</div>
+      <div style="display:flex;gap:12px;justify-content:center">
+        <button id="yesBtn" class="btn-inline btn-green" style="font-size:18px;padding:12px 18px">TAKK!!!</button>
+        <button id="noBtn" class="btn-inline btn-red" style="font-size:18px;padding:12px 18px">nie</button>
+      </div>
+    </div>
+  </div>
+  <div id="flowers3"></div>
+</div>
+
+<!-- effects -->
+<div id="effects" class="effects" aria-hidden="true"></div>
+<img id="catGif" class="cat-gif" src="" alt="" style="display:none"/>
 
 <script>
-// wspólne funkcje spadających elementów
-function spawnFalling(parent,symbol,count){
-    for(let i=0;i<count;i++){
-        let el=document.createElement("div");
-        el.className="falling";
-        el.textContent=symbol;
-        el.style.left=Math.random()*100+"vw";
-        el.style.fontSize=16+Math.random()*25+"px";
-        el.style.animationDuration=3+Math.random()*4+"s";
-        parent.appendChild(el);
+/* ---------- helper functions ---------- */
+function rand(min,max){return min + Math.random()*(max-min)}
+function createFalling(container, emoji, count, sizeRange=[16,36], durationRange=[3.5,6]) {
+  for(let i=0;i<count;i++){
+    const el = document.createElement('div');
+    el.className = 'fall';
+    el.textContent = emoji;
+    el.style.left = (Math.random()*95)+'vw';
+    const fs = Math.round(rand(sizeRange[0], sizeRange[1]));
+    el.style.fontSize = fs + 'px';
+    el.style.animationDuration = rand(durationRange[0], durationRange[1]) + 's';
+    el.style.opacity = (0.7 + Math.random()*0.3);
+    container.appendChild(el);
+    // remove after animation
+    setTimeout(()=>{ if(el && el.parentNode) el.parentNode.removeChild(el); }, (durationRange[1]+0.5)*1000);
+  }
+}
+function createFlowers(container, emojis, count=18) {
+  for(let i=0;i<count;i++){
+    const e = document.createElement('div');
+    e.className = 'flower';
+    e.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    e.style.left = (Math.random()*88 + 4) + 'vw';
+    e.style.top = (Math.random()*80 + 5) + 'vh';
+    const s = Math.round(rand(18,34));
+    e.style.fontSize = s + 'px';
+    e.style.opacity = (0.75 + Math.random()*0.25);
+    // subtle floating animation via CSS transform using setInterval
+    container.appendChild(e);
+  }
+}
+/* ---------- page setup ---------- */
+const p1 = document.getElementById('p1'), p2 = document.getElementById('p2'), p3 = document.getElementById('p3');
+const fall1 = document.getElementById('fall1'), fall2 = document.getElementById('fall2'), fall3 = document.getElementById('fall3');
+const flowers1 = document.getElementById('flowers1'), flowers2 = document.getElementById('flowers2'), flowers3 = document.getElementById('flowers3');
+const effects = document.getElementById('effects');
+const catGif = document.getElementById('catGif');
+let currentPage = 1;
+
+/* populate falling & flowers for each page */
+createFlowers(flowers1, ['🌸','🌺','🌷','🌼'], 20);
+createFlowers(flowers2, ['🌻','🌹','🌼','🌺'], 20);
+createFlowers(flowers3, ['🌸','🌷','🌹','🌺','🌼'], 22);
+
+/* spawn a steady stream by repeating small batches */
+function startStream(){
+  // page1 heavy hearts
+  createFalling(fall1,'❤️',12,[18,40],[3.5,6]);
+  createFalling(fall1,'🌸',6,[14,26],[4,6]);
+  // page2 balanced
+  createFalling(fall2,'❤️',8,[16,36],[3.5,6]);
+  createFalling(fall2,'✨',6,[14,26],[3.5,5.5]);
+  // page3
+  createFalling(fall3,'❤️',10,[18,38],[3.5,5.5]);
+  createFalling(fall3,'✨',8,[14,28],[3.5,5.5]);
+}
+/* run stream periodically */
+startStream();
+const streamTimer = setInterval(startStream, 1400);
+
+/* page switching helper */
+function showPage(n){
+  p1.classList.remove('active'); p2.classList.remove('active'); p3.classList.remove('active');
+  if(n===1) p1.classList.add('active');
+  if(n===2) p2.classList.add('active');
+  if(n===3) p3.classList.add('active');
+  currentPage = n;
+}
+
+/* ---------- PAGE 1: heart click -> page2 ---------- */
+const heart1 = document.getElementById('heart1');
+heart1.addEventListener('click', ()=> {
+  // small pulse
+  heart1.style.transform = 'scale(0.96)';
+  setTimeout(()=>heart1.style.transform = '', 220);
+  // go to page2 and set it up
+  showPage(2);
+  // ensure page2 magic setup is initialized (safe if run many times)
+  initPage2();
+});
+
+/* ---------- PAGE 2: magic heart behavior ---------- */
+let page2Initialized = false;
+function initPage2(){
+  if(page2Initialized) return;
+  page2Initialized = true;
+  const magicHeart = document.getElementById('magicHeart');
+  const mhText = document.getElementById('mhText');
+  const mhSub = document.getElementById('mhSub');
+  // initial styles for magicHeart to allow absolute movement
+  magicHeart.style.position = 'absolute';
+  magicHeart.style.transition = 'all 0.55s cubic-bezier(.2,.9,.2,1)';
+  // step logic
+  let step = 0;
+  const poems = [
+    "Lena, Lenka, Lencia — serduszko puka cicho",
+    "Lencia mój promyk dnia — śmiej się tu ze mną",
+    "Lenka — jak w piosence, wszystko dla Ciebie"
+  ];
+  magicHeart.addEventListener('click', ()=>{
+    step++;
+    if(step===1){
+      // change header text to a poem and hide subtext
+      mhText.textContent = poems[Math.floor(Math.random()*poems.length)];
+      mhSub.style.display = 'none';
+      // move to top-right
+      magicHeart.style.top = '6%';
+      magicHeart.style.right = '6%';
+      magicHeart.style.left = '';
+      magicHeart.style.bottom = '';
+    } else if(step===2){
+      // move to bottom-left and change subtext
+      magicHeart.style.top = '';
+      magicHeart.style.right = '';
+      magicHeart.style.left = '6%';
+      magicHeart.style.bottom = '6%';
+      mhText.textContent = mhText.textContent; // keep poem
+      mhSub.style.display = 'block';
+      mhSub.textContent = 'Oho i co teraz?';
+    } else if(step===3){
+      // back to center, prepare last button text inside small subtext
+      magicHeart.style.position = '';
+      magicHeart.style.top = '';
+      magicHeart.style.left = '';
+      magicHeart.style.right = '';
+      magicHeart.style.bottom = '';
+      mhSub.style.display = 'block';
+      mhSub.textContent = 'no dobra ale ostatnia rzecz';
+    } else {
+      // proceed to page 3
+      showPage(3);
+      initPage3();
     }
+  });
 }
-function spawnFlowers(parent,arr){
-    for(let i=0;i<25;i++){
-        let f=document.createElement("div");
-        f.className="flower";
-        f.textContent=arr[Math.floor(Math.random()*arr.length)];
-        f.style.left=Math.random()*95+"vw";
-        f.style.top=Math.random()*95+"vh";
-        f.style.fontSize=20+Math.random()*25+"px";
-        parent.appendChild(f);
+
+/* ---------- PAGE 3: final interactions ---------- */
+let page3Initialized=false;
+function initPage3(){
+  if(page3Initialized) return;
+  page3Initialized=true;
+  const yesBtn = document.getElementById('yesBtn');
+  const noBtn = document.getElementById('noBtn');
+  const finalQ = document.getElementById('finalQ');
+
+  let noClicks = 0;
+  const messages = ["ale jak to","aha?","😻","no wezzz"];
+  // place a message inside a floating small bubble near center (simulate inside heart)
+  function showMessage(msg){
+    const d = document.createElement('div');
+    d.textContent = msg;
+    d.style.position='absolute';
+    d.style.left = (50 + rand(-18,18)) + '%';
+    d.style.top = (50 + rand(-18,18)) + '%';
+    d.style.transform='translate(-50%,-50%)';
+    d.style.color='white';
+    d.style.background='rgba(0,0,0,0.18)';
+    d.style.padding='6px 10px';
+    d.style.borderRadius='12px';
+    d.style.zIndex=30;
+    d.style.fontWeight='700';
+    d.style.opacity='0';
+    document.body.appendChild(d);
+    // fade in/out
+    setTimeout(()=>d.style.transition='all .25s ease',10);
+    setTimeout(()=>d.style.opacity='1',40);
+    setTimeout(()=>d.style.opacity='0',2200);
+    setTimeout(()=>{ if(d.parentNode) d.parentNode.removeChild(d); },2600);
+  }
+
+  noBtn.addEventListener('click', ()=>{
+    noClicks++;
+    // enlarge yesBtn text gradually
+    const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+    yesBtn.style.fontSize = (currentSize + 5) + 'px';
+    // show message inside page (cycle messages)
+    const msgIndex = Math.min(messages.length-1, noClicks-1);
+    showMessage(messages[msgIndex] || messages[messages.length-1]);
+    // after 8 clicks -> full-screen TAK
+    if(noClicks >= 8){
+      triggerFinalExplosion();
     }
+  });
+
+  yesBtn.addEventListener('click', ()=>{
+    // gentle enlarge on manual yes clicks too
+    const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+    yesBtn.style.fontSize = (currentSize + 4) + 'px';
+  });
 }
 
-// PAGE 1
-const page1=document.getElementById("page1");
-spawnFalling(page1,"❤️",60);
-spawnFlowers(page1,["🌸","🌺","🌷","🌼"]);
-let box1=document.createElement("div");
-box1.className="center-box";
-box1.innerHTML=`
-<h2>No hej to ja</h2>
-<p>Przygotowałem coś dla ciebie</p>
-<button id="b1">to tu masz nacisnąć myszko</button>`;
-page1.appendChild(box1);
-b1.onclick=()=>{showPage(1); setupPage2();};
+/* ---------- final explosion & cats GIF ---------- */
+function triggerFinalExplosion(){
+  // lock page3 and show full TAK
+  const page3Inner = document.getElementById('p3');
+  // clear content of p3 to show only TAK
+  page3Inner.innerHTML = '';
+  const big = document.createElement('div');
+  big.className = 'full-tak';
+  big.textContent = 'TAK!!!';
+  document.body.appendChild(big);
 
-// PAGE 2
-const page2=document.getElementById("page2");
-function setupPage2(){
-    spawnFalling(page2,"❤️",40);
-    spawnFalling(page2,"⭐",40);
-    spawnFlowers(page2,["🌻","🌹","🌼","🌺"]);
-    let box2=document.createElement("div");
-    box2.className="center-box";
-    let heartBox=document.createElement("div");
-    heartBox.className="heart-box";
-    heartBox.innerHTML=`<span id="hbText">Jeszcze nie tu...</span><br><button id="moveBtn">teraz tutaj</button>`;
-    box2.appendChild(heartBox);
-    page2.appendChild(box2);
-    showPage(1,false); // pewność, że aktywne
-    showPage(1,true); // przejście
-    let step=0;
-    const texts=["Lena, Lenka, Lencia ❤️ serduszko puka","Lencia moja 💕","Lenka skarb mój 😍"];
-    moveBtn.onclick=()=>{
-        step++;
-        if(step==1){ hbText.textContent=texts[Math.floor(Math.random()*texts.length)]; heartBox.style.top="10%"; heartBox.style.left="80%"; }
-        else if(step==2){ heartBox.style.top="80%"; heartBox.style.left="10%"; moveBtn.textContent="oho i co teraz?"; }
-        else if(step==3){ heartBox.style.top="50%"; heartBox.style.left="50%"; moveBtn.textContent="no dobra ale ostatnia rzecz"; step=4;}
-        else if(step==4){ showPage(2); setupPage3();}
-    };
-    showPage(1);
+  // create bursts of hearts & stars
+  for(let i=0;i<90;i++){
+    const e = document.createElement('div');
+    e.className = 'fall';
+    e.textContent = (Math.random()>0.4)? '❤️' : '✨';
+    const size = Math.round(rand(20,60));
+    e.style.fontSize = size + 'px';
+    e.style.left = (50 + rand(-35,35)) + 'vw';
+    e.style.top = (50 + rand(-35,35)) + 'vh';
+    const dur = rand(1.2,2.8);
+    e.style.animationDuration = dur + 's';
+    e.style.opacity = 1;
+    // make them pop outward by using transform on insertion
+    e.style.transform = `translate(${rand(-200,200)}px,${rand(-200,200)}px)`;
+    e.style.transition = `transform ${dur}s cubic-bezier(.2,.9,.2,1),opacity ${dur}s`;
+    document.body.appendChild(e);
+    setTimeout(()=>{ e.style.opacity = 0; if(e.parentNode) e.parentNode.removeChild(e); }, dur*1000 + 400);
+  }
+
+  // show cat gif (two happy cats) — embedded remote gif
+  catGif.src = "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif"; // happy cats
+  catGif.style.display = 'block';
+  catGif.style.opacity = '0';
+  catGif.style.transition = 'opacity .6s ease';
+  setTimeout(()=>catGif.style.opacity='1',120);
+
+  // also small fireworks circles
+  for(let i=0;i<12;i++){
+    const c = document.createElement('div');
+    c.style.position='fixed';
+    c.style.left = (50 + rand(-40,40)) + 'vw';
+    c.style.top  = (50 + rand(-40,40)) + 'vh';
+    c.style.width = c.style.height = Math.round(rand(8,24)) + 'px';
+    c.style.background = (Math.random()>0.5) ? 'rgba(255,30,100,0.95)' : 'rgba(255,215,60,0.95)';
+    c.style.borderRadius='50%';
+    c.style.zIndex = 1100;
+    c.style.opacity = 1;
+    document.body.appendChild(c);
+    const dur = rand(700,1400);
+    setTimeout(()=>{ c.style.transition = `transform ${dur}ms ease,opacity ${dur}ms`; c.style.transform = `translateY(${rand(-120,120)}px) scale(2)`; c.style.opacity=0; }, 40);
+    setTimeout(()=>{ if(c.parentNode) c.parentNode.removeChild(c); }, dur+400);
+  }
+
+  // Make the big TAK clickable to restart (optional)
+  big.addEventListener('click', ()=> location.reload());
 }
 
-// PAGE 3
-const page3=document.getElementById("page3");
-function setupPage3(){
-    spawnFalling(page3,"❤️",50);
-    spawnFalling(page3,"⭐",30);
-    spawnFlowers(page3,["🌸","🌷","🌹","🌺","🌼"]);
-    let box3=document.createElement("div");
-    box3.className="center-box";
-    box3.innerHTML=`
-<h2 id="finalMessage">Czy zostaniesz moją walentynką?</h2>
-<div style="margin-top:20px;">
-<button class="green" id="yesBtn" style="font-size:14px;">TAKK!!!</button>
-<button class="red" id="noBtn" style="font-size:14px;">nie</button>
-</div>`;
-    page3.appendChild(box3);
-    showPage(2);
+/* ---------- start by showing page1 (already active) ---------- */
+showPage(1);
 
-    let counter=0;
-    let messages=["ale jak to","aha?","😻","no wezzz"];
-    noBtn.onclick=()=>{
-        counter++;
-        let size = 14 + counter*4;
-        yesBtn.style.fontSize=size+"px";
-        let msgIndex = counter-1;
-        if(msgIndex<messages.length){
-            let span=document.createElement("div");
-            span.textContent=messages[msgIndex];
-            span.style.position="absolute";
-            span.style.top=Math.random()*60+20+"%";
-            span.style.left=Math.random()*60+20+"%";
-            span.style.color="white";
-            page3.appendChild(span);
-            setTimeout(()=>span.remove(),3000);
-        }
-        if(counter>=8){ triggerFinal(); }
-    };
+/* safe initialization helpers in case user navigates back and forth */
+function initPage2Safe(){ initPage2(); }
+function initPage3Safe(){ initPage3(); }
 
-    yesBtn.onclick=()=>{
-        let size = parseInt(window.getComputedStyle(yesBtn).fontSize) + 8;
-        yesBtn.style.fontSize=size+"px";
-    };
-}
-
-function triggerFinal(){
-    page3.innerHTML="";
-    let final=document.createElement("div");
-    final.style.position="absolute";
-    final.style.inset="0";
-    final.style.display="flex";
-    final.style.justifyContent="center";
-    final.style.alignItems="center";
-    final.style.fontSize="200px";
-    final.style.color="white";
-    final.style.textAlign="center";
-    final.textContent="TAK!!!";
-    page3.appendChild(final);
-
-    // fajerwerki i serca
-    let fw=document.getElementById("fireworks");
-    fw.style.display="flex";
-    fw.innerHTML='<img src="https://i.imgur.com/LJvL7aK.gif" style="width:200px;">';
-}
-
-function showPage(n){ pages.forEach(p=>p.classList.remove("active")); pages[n].classList.add("active"); }
+/* Expose for debugging (not necessary) */
+window._debug = { showPage, initPage2Safe, initPage3Safe };
 
 </script>
 </body>
