@@ -9,21 +9,75 @@ body {
 /* RAMKA */
 .frame {
     position: fixed;
-    inset: 15px;
-    border: 8px solid rgba(255,255,255,0.3);
-    border-radius: 25px;
+    inset: 0;
     pointer-events: none;
+    z-index: 5;
 }
+
+.frame::before,
+.frame::after {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border-radius: 30px;
+    background:
+        repeating-linear-gradient(
+            45deg,
+            rgba(255,182,193,0.35) 0px,
+            rgba(255,182,193,0.35) 6px,
+            transparent 6px,
+            transparent 14px
+        );
+    animation: vineMove 20s linear infinite;
+}
+
+/* kwiatki */
+.frame::after {
+    background:
+        radial-gradient(circle at 10% 10%, #ffd6e7 0 6px, transparent 7px),
+        radial-gradient(circle at 80% 20%, #ffc0d9 0 6px, transparent 7px),
+        radial-gradient(circle at 20% 85%, #ffd6e7 0 6px, transparent 7px),
+        radial-gradient(circle at 90% 90%, #ffc0d9 0 6px, transparent 7px);
+    animation: flowersFloat 12s ease-in-out infinite alternate;
+}
+
+@keyframes vineMove {
+    from { background-position: 0 0; }
+    to { background-position: 300px 300px; }
+}
+
+@keyframes flowersFloat {
+    from { transform: scale(1); opacity: 0.7; }
+    to { transform: scale(1.05); opacity: 1; }
+}
+
 
 /* FILARY */
 .pillar {
     position: fixed;
     top: 0;
     bottom: 0;
-    width: 70px;
-    background: linear-gradient(#ffb7c5, #ff6f91);
-    opacity: 0.4;
+    width: 80px;
+    background:
+        repeating-linear-gradient(
+            135deg,
+            rgba(255,183,197,0.5) 0px,
+            rgba(255,183,197,0.5) 8px,
+            transparent 8px,
+            transparent 18px
+        );
+    animation: vineSide 12s linear infinite;
+    pointer-events: none;
 }
+
+.pillar.left { left: 0; }
+.pillar.right { right: 0; }
+
+@keyframes vineSide {
+    from { background-position: 0 0; }
+    to { background-position: 0 400px; }
+}
+
 
 .pillar.left { left: 0; }
 .pillar.right { right: 0; }
