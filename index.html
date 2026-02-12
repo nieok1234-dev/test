@@ -7,27 +7,30 @@
 </head>
 <body>
 
-    <!-- OBRAMÓWKA -->
-    <div class="frame"></div>
-    <div class="pillar left"></div>
-    <div class="pillar right"></div>
-
     <!-- EKRAN 1 -->
-    <div id="screen1" class="screen active">
+    <div id="screen1" class="screen active" data-style="1">
         <div class="container">
             <h1>No hej, to ja 👋</h1>
             <p>Przygotowałem coś dla Ciebie 💝</p>
-            <button onclick="nextScreen()">
-                To tu masz nacisnąć myszko 🐭
-            </button>
+            <button onclick="nextScreen()">To tu masz nacisnąć myszko 🐭</button>
         </div>
     </div>
 
     <!-- EKRAN 2 -->
-    <div id="screen2" class="screen">
+    <div id="screen2" class="screen" data-style="2">
+        <div id="magicBox" class="container floating">
+            <h1 id="header2">😳 No dobra...</h1>
+            <p id="text2">Jeszcze nie tu... ale zaraz chciałbym Cię o coś zapytać 💌</p>
+            <button id="btn2" onclick="moveBox()">Teraz tutaj</button>
+        </div>
+    </div>
+
+    <!-- EKRAN 3 -->
+    <div id="screen3" class="screen" data-style="3">
         <div class="container">
-            <h1>😳 No dobra...</h1>
-            <p>Jeszcze nie tu... ale zaraz chciałbym Cię o coś zapytać 💌</p>
+            <h1>💖 Mam do Ciebie pytanie...</h1>
+            <p>Jesteś gotowa? 😳</p>
+            <button onclick="/* tu możesz dodać akcję finałową */">TAK 🥹</button>
         </div>
     </div>
 
