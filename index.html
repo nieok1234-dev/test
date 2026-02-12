@@ -1,78 +1,72 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Dla Ciebie ❤️</title>
 <style>
   *{box-sizing:border-box}
-  html,body{height:100%}
+  html,body{height:100%;margin:0}
   body{
-    margin:0;
-    background: linear-gradient(180deg,#ff5fa0 0%, #ff2d71 100%);
+    background: linear-gradient(180deg,#ff6fa8 0%, #ff2d71 100%);
     overflow:hidden;
-    font-family:"Comic Sans MS", "Marker Felt", cursive, sans-serif;
+    font-family:"Comic Sans MS","Marker Felt",cursive, sans-serif;
+    -webkit-font-smoothing:antialiased;
   }
 
   .page{position:absolute;inset:0;display:none}
   .page.active{display:block}
 
+  /* falling */
   .falling{position:absolute;top:-80px;pointer-events:none;opacity:0.9;user-select:none;transform-origin:center;animation:fall linear infinite}
-  @keyframes fall{ to{ transform: translateY(120vh) rotate(360deg);} }
+  @keyframes fall{to{ transform: translateY(120vh) rotate(360deg); }}
 
   .flower{position:absolute;font-size:24px;pointer-events:none;animation:float 6s ease-in-out infinite}
   @keyframes float{50%{transform:translateY(-10px)}}
 
-  .heart-box{
-    position:absolute;
-    width:280px;
-    height:260px;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    color:white;
-    z-index:5;
-  }
+  /* small centered heart box (page1/2) */
+  .heart-box{position:absolute;width:280px;height:260px;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;z-index:5}
+  .heart{position:relative;width:220px;height:200px;display:flex;align-items:center;justify-content:center}
+  .heart svg{position:absolute;left:0;top:0;width:100%;height:100%;z-index:0;filter:drop-shadow(0 10px 20px rgba(0,0,0,0.12))}
+  .heart .heart-content{position:relative;z-index:2;width:72%;text-align:center}
+  button.btn{margin-top:12px;padding:10px 14px;border-radius:12px;border:none;cursor:pointer;font-weight:700;font-size:15px}
 
-  .heart{ position:relative; width:220px; height:200px; display:flex; align-items:center; justify-content:center; }
-  .heart svg{ position:absolute; left:0; top:0; width:100%; height:100%; z-index:0; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.12)); }
-  .heart .heart-content{ position:relative; z-index:2; width:70%; pointer-events:auto; }
-
-  button.btn{ margin-top:12px; padding:10px 14px; border-radius:12px; border:none; cursor:pointer; font-weight:700; font-size:15px }
-
+  /* Page3 layout */
   .page3-container{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:4}
   .question{font-size:34px;color:#6b0532;text-shadow:0 3px 10px rgba(0,0,0,0.12);margin-bottom:6vh}
 
   .choices{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;gap:12px;align-items:center;z-index:6}
-  .choice-tak{
-    background:#2ecc71;color:white; /* zielony */
-    padding:8px;border-radius:12px;font-weight:900;transform-origin:center;font-size:14px;cursor:pointer;
-    box-shadow:0 6px 14px rgba(0,0,0,0.12);
-    transition: width 220ms ease, height 220ms ease, font-size 220ms ease, transform 220ms ease;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .choice-nie{background:#ff3b30;color:white;padding:8px 12px;border-radius:8px;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,0.12)}
 
-  .big-heart{position:relative;width:360px;height:320px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;z-index:5}
-  .big-heart svg{position:absolute;left:0;top:0;width:100%;height:100%;z-index:0;filter: drop-shadow(0 12px 30px rgba(0,0,0,0.18))}
+  /* green button (this will grow) */
+  .choice-tak{
+    background:#2ecc71;color:#fff;border-radius:12px;padding:10px;
+    display:flex;align-items:center;justify-content:center;font-weight:900;
+    font-size:16px;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.18);
+    transition: width 220ms ease, height 220ms ease, font-size 220ms ease, transform 220ms ease, left 220ms ease, top 220ms ease;
+  }
+  .choice-nie{background:#ff3b30;color:#fff;padding:8px 12px;border-radius:8px;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,0.12)}
+
+  /* big heart (decor) */
+  .big-heart{position:relative;width:360px;height:320px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;z-index:5}
+  .big-heart svg{position:absolute;left:0;top:0;width:100%;height:100%;z-index:0;filter: drop-shadow(0 12px 30px rgba(0,0,0,0.18)) }
   .big-heart .inside{position:relative;z-index:2;width:78%;text-align:center;color:white}
 
-  /* overlay & explosion */
-  .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);z-index:200}
+  /* overlay & fireworks */
+  .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);z-index:900}
   .overlay.show{display:flex}
-  .explosion{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:210}
+  .explosion{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:910}
   .spark{position:absolute;width:12px;height:12px;border-radius:50%;pointer-events:none;opacity:0.95;transform:translate(-50%,-50%);animation:fly 1000ms ease-out forwards}
-  @keyframes fly{ to{ transform: translate(var(--tx), var(--ty)) scale(0.4); opacity:0; } }
+  @keyframes fly{to{transform:translate(var(--tx),var(--ty)) scale(0.4);opacity:0}}
 
-  /* GIF centered, but only used during celebration */
-  .cats-gif{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:720px;height:auto;z-index:220;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,0.35);overflow:hidden;display:none;background:white}
+  /* GIF (your GIF, slightly larger default) */
+  .cats-gif{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:820px;height:auto;z-index:920;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,0.45);overflow:hidden;background:white;display:none}
   .cats-gif.show{display:block}
 
-  @media (max-width:840px){ .cats-gif{width:92vw} .big-heart{width:280px;height:240px} .heart-box{width:240px;height:220px} }
+  @media (max-width:900px){
+    .cats-gif{width:92vw}
+    .big-heart{width:280px;height:240px}
+    .heart-box{width:240px;height:220px}
+  }
 </style>
 </head>
 <body>
@@ -81,10 +75,11 @@
   <div id="page2" class="page"></div>
   <div id="page3" class="page"></div>
 
+  <!-- overlay for celebration -->
   <div id="overlay" class="overlay" aria-hidden="true">
     <div id="explosion" class="explosion"></div>
-    <!-- GIF całującego ekranu kota -->
-    <img id="catsGif" class="cats-gif" src="https://media.giphy.com/media/3oEduSbSGpGaRX2Vri/giphy.gif" alt="całujący ekran kot" />
+    <!-- GIF FROM YOUR CODE -->
+    <img id="catsGif" class="cats-gif" src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" alt="szczęśliwe koty skaczące"/>
   </div>
 
 <script>
@@ -92,126 +87,121 @@ document.addEventListener("DOMContentLoaded", () => {
   const page1 = document.getElementById("page1");
   const page2 = document.getElementById("page2");
   const page3 = document.getElementById("page3");
+  const pages = [page1,page2,page3];
 
-  function showPage(n){ [page1,page2,page3].forEach(p=>p.classList.remove('active')); [page1,page2,page3][n].classList.add('active'); }
+  function showPage(n){
+    pages.forEach(p=>p.classList.remove("active"));
+    pages[n].classList.add("active");
+  }
 
+  // falling items
   function falling(parent,symbol,count){
     for(let i=0;i<count;i++){
-      const el = document.createElement('div');
-      el.className = 'falling';
+      const el = document.createElement("div");
+      el.className = "falling";
       el.textContent = symbol;
-      el.style.left = (Math.random()*100) + 'vw';
-      el.style.fontSize = (12 + Math.random()*30) + 'px';
-      el.style.animationDuration = (4 + Math.random()*6) + 's';
+      el.style.left = (Math.random()*100) + "vw";
+      el.style.fontSize = (12 + Math.random()*30) + "px";
+      el.style.animationDuration = (4 + Math.random()*6) + "s";
       el.style.opacity = 0.6 + Math.random()*0.4;
       el.style.transform = `rotate(${Math.random()*360}deg)`;
-      el.style.top = (-20 - Math.random()*120) + 'px';
+      el.style.top = (-20 - Math.random()*120) + "px";
       parent.appendChild(el);
-      setTimeout(()=> el.remove(), (parseFloat(el.style.animationDuration)||5)*1000 + 2000);
+      setTimeout(()=> el.remove(), (parseFloat(el.style.animationDuration)||5)*1000 + 2200);
     }
   }
 
   function flowers(parent, emojis, howMany=20){
     for(let i=0;i<howMany;i++){
-      const f = document.createElement('div');
-      f.className = 'flower';
+      const f = document.createElement("div");
+      f.className = "flower";
       f.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-      f.style.left = (Math.random()*95) + 'vw';
-      f.style.top = (Math.random()*85) + 'vh';
-      f.style.fontSize = (16 + Math.random()*28) + 'px';
+      f.style.left = (Math.random()*95) + "vw";
+      f.style.top = (Math.random()*85) + "vh";
+      f.style.fontSize = (16 + Math.random()*28) + "px";
       f.style.opacity = 0.9 - Math.random()*0.4;
       parent.appendChild(f);
     }
   }
 
-  /* PAGE 1 */
-  falling(page1,'❤️',60);
-  flowers(page1, ['🌸','🌺','🌷','🌼'], 18);
-
-  const box1 = document.createElement('div');
-  box1.className = 'heart-box';
+  /* -------- PAGE 1 -------- */
+  falling(page1,"❤️",60);
+  flowers(page1,["🌸","🌺","🌷","🌼"],18);
+  const box1 = document.createElement("div");
+  box1.className = "heart-box";
   box1.innerHTML = `
     <div class="heart">
-      <svg viewBox="0 0 32 29" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-        <path d="M23.6,0c-2.9,0-5.6,1.8-7.6,4.4C13,1.8,10.4,0,7.4,0C2.5,0,0,3.5,0,8.4c0,9.2,16,20.6,16,20.6S32,17.6,32,8.4 C32,3.5,28.5,0,23.6,0z" fill="#ff2d55"/>
-      </svg>
+      <svg viewBox="0 0 32 29" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M23.6,0c-2.9,0-5.6,1.8-7.6,4.4C13,1.8,10.4,0,7.4,0C2.5,0,0,3.5,0,8.4c0,9.2,16,20.6,16,20.6S32,17.6,32,8.4 C32,3.5,28.5,0,23.6,0z" fill="#ff2d55"/></svg>
       <div class="heart-content">
         <h2 style="margin:0;font-size:20px">No hej to ja</h2>
         <p style="margin:8px 0 0;font-size:14px">Przygotowałem coś dla ciebie</p>
-        <div style="margin-top:10px">
-          <button id="b1" class="btn">to tu masz nacisnąć myszko</button>
-        </div>
+        <div style="margin-top:10px"><button id="b1" class="btn">to tu masz nacisnąć myszko</button></div>
       </div>
     </div>
   `;
   page1.appendChild(box1);
-  document.getElementById('b1').addEventListener('click', ()=> showPage(1));
+  document.getElementById("b1").addEventListener("click", ()=> showPage(1));
 
-  /* PAGE 2 */
-  falling(page2,'❤️',30);
-  falling(page2,'⭐',20);
-  flowers(page2, ['🌻','🌹','🌼','🌺'], 22);
+  /* -------- PAGE 2 -------- */
+  falling(page2,"❤️",30);
+  falling(page2,"⭐",20);
+  flowers(page2,["🌻","🌹","🌼","🌺"],22);
 
-  const heartWrapper = document.createElement('div');
-  heartWrapper.className = 'heart-box';
-  heartWrapper.style.width = '360px';
-  heartWrapper.style.height = '320px';
-  heartWrapper.innerHTML = `
+  const heartWrap = document.createElement("div");
+  heartWrap.className = "heart-box";
+  heartWrap.style.width = "360px";
+  heartWrap.style.height = "320px";
+  heartWrap.innerHTML = `
     <div class="heart" id="movingHeart">
-      <svg viewBox="0 0 32 29" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-        <path d="M23.6,0c-2.9,0-5.6,1.8-7.6,4.4C13,1.8,10.4,0,7.4,0C2.5,0,0,3.5,0,8.4c0,9.2,16,20.6,16,20.6S32,17.6,32,8.4 C32,3.5,28.5,0,23.6,0z" fill="#ff2d55"/>
-      </svg>
-      <div class="heart-content" id="heartContent">
+      <svg viewBox="0 0 32 29" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M23.6,0c-2.9,0-5.6,1.8-7.6,4.4C13,1.8,10.4,0,7.4,0C2.5,0,0,3.5,0,8.4c0,9.2,16,20.6,16,20.6S32,17.6,32,8.4 C32,3.5,28.5,0,23.6,0z" fill="#ff2d55"/></svg>
+      <div class="heart-content">
         <div id="ptext" style="font-size:16px;line-height:1.25">Jeszcze nie tu ale zaraz chciałbym cię o coś zapytać</div>
-        <div style="margin-top:10px">
-          <button id="moveBtn" class="btn">teraz tutaj</button>
-        </div>
+        <div style="margin-top:10px"><button id="moveBtn" class="btn">teraz tutaj</button></div>
       </div>
     </div>
   `;
-  page2.appendChild(heartWrapper);
+  page2.appendChild(heartWrap);
 
   let step = 0;
-  const moveBtn = document.getElementById('moveBtn');
-  heartWrapper.style.left = '50%'; heartWrapper.style.top = '50%'; heartWrapper.style.transform = 'translate(-50%,-50%)';
-  moveBtn.addEventListener('click', ()=>{
+  const moveBtn = document.getElementById("moveBtn");
+  heartWrap.style.left="50%"; heartWrap.style.top="50%"; heartWrap.style.transform="translate(-50%,-50%)";
+  moveBtn.addEventListener("click", ()=>{
     step++;
     if(step===1){
-      heartWrapper.style.top='12%';
-      heartWrapper.style.left='80%';
+      heartWrap.style.top="12%";
+      heartWrap.style.left="80%";
     } else if(step===2){
-      heartWrapper.style.top='78%';
-      heartWrapper.style.left='10%';
-      moveBtn.textContent = 'oho i co teraz?';
+      heartWrap.style.top="78%";
+      heartWrap.style.left="10%";
+      moveBtn.textContent = "oho i co teraz?";
     } else if(step===3){
-      heartWrapper.style.top='50%';
-      heartWrapper.style.left='50%';
-      moveBtn.textContent = 'no dobra ale ostatnia rzecz';
+      heartWrap.style.top="50%";
+      heartWrap.style.left="50%";
+      moveBtn.textContent = "no dobra ale ostatnia rzecz";
     } else {
-      showPage(2); // index 2 = page3
+      showPage(2); // page index 2 -> page3
       initPage3();
     }
   });
 
-  /* PAGE 3 */
+  /* -------- PAGE 3 (init) -------- */
   function initPage3(){
-    page3.innerHTML = '';
-    falling(page3,'❤️',40);
-    falling(page3,'⭐',40);
-    flowers(page3, ['🌸','🌷','🌹','🌺','🌼'], 26);
+    page3.innerHTML = "";
+    falling(page3,"❤️",40);
+    falling(page3,"⭐",40);
+    flowers(page3,["🌸","🌷","🌹","🌺","🌼"],26);
 
-    const container = document.createElement('div');
-    container.className = 'page3-container';
+    const container = document.createElement("div");
+    container.className = "page3-container";
     container.innerHTML = `
-      <div style="height:8vh"></div>
+      <div style="height:8vh;"></div>
       <div class="question">czy zostaniesz moją walentynką?</div>
       <div style="display:flex;align-items:center;justify-content:center;">
         <div class="big-heart" id="bigHeart">
-          <svg viewBox="0 0 32 29" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-            <path d="M23.6,0c-2.9,0-5.6,1.8-7.6,4.4C13,1.8,10.4,0,7.4,0C2.5,0,0,3.5,0,8.4c0,9.2,16,20.6,16,20.6S32,17.6,32,8.4 C32,3.5,28.5,0,23.6,0z" fill="#ff2d55"/>
-          </svg>
+          <svg viewBox="0 0 32 29" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M23.6,0c-2.9,0-5.6,1.8-7.6,4.4C13,1.8,10.4,0,7.4,0C2.5,0,0,3.5,0,8.4c0,9.2,16,20.6,16,20.6S32,17.6,32,8.4 C32,3.5,28.5,0,23.6,0z" fill="#ff2d55"/></svg>
           <div class="inside">
             <div id="heartLines" style="margin-bottom:12px"></div>
+            <!-- no white text here — only green button will grow -->
           </div>
         </div>
       </div>
@@ -223,192 +213,214 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     page3.appendChild(container);
 
-    const nieBtn = document.getElementById('nieBtn');
-    const takBtn = document.getElementById('takBtn');
-    const heartLines = document.getElementById('heartLines');
+    const takBtn = document.getElementById("takBtn");
+    const nieBtn = document.getElementById("nieBtn");
+    const heartLines = document.getElementById("heartLines");
 
     let nieClicks = 0;
-    const messages = ['ale jak to','aha?','😅','no wezzz'];
+    const messages = ["ale jak to","aha?","😅","no wezzz"];
     let msgIndex = 0;
     const STEPS = 8;
 
-    // green button initial square settings
+    // initial explicit size of green button (square-ish)
     const initialSize = 110;
-    function finalSize() { return Math.round(Math.min(window.innerWidth, window.innerHeight) * 0.9); }
+    function finalW(){ return window.innerWidth; }
+    function finalH(){ return window.innerHeight; }
 
-    takBtn.style.width = initialSize + 'px';
-    takBtn.style.height = initialSize + 'px';
-    takBtn.style.borderRadius = '12px';
-    takBtn.style.fontSize = Math.floor(initialSize * 0.18) + 'px';
-    takBtn.style.display = 'flex'; takBtn.style.alignItems = 'center'; takBtn.style.justifyContent = 'center';
+    takBtn.style.width = initialSize + "px";
+    takBtn.style.height = initialSize + "px";
+    takBtn.style.borderRadius = "12px";
+    takBtn.style.fontSize = Math.floor(initialSize * 0.18) + "px";
+    takBtn.style.display = "flex";
+    takBtn.style.alignItems = "center";
+    takBtn.style.justifyContent = "center";
+    takBtn.style.cursor = "pointer";
 
-    nieBtn.addEventListener('click', ()=>{
+    // clicking "nie" increases size linearly; on 8 -> becomes fullscreen and blocks everything else
+    nieBtn.addEventListener("click", ()=>{
       nieClicks++;
       const m = messages[msgIndex] || messages[messages.length-1];
-      const span = document.createElement('div');
+      const span = document.createElement("div");
       span.textContent = m;
-      span.style.fontSize = '14px';
-      span.style.margin = '6px 0';
+      span.style.fontSize = "14px";
+      span.style.margin = "6px 0";
       heartLines.appendChild(span);
-      msgIndex = Math.min(msgIndex + 1, messages.length-1);
+      msgIndex = Math.min(msgIndex + 1, messages.length - 1);
 
-      const fs = finalSize();
-      const newSize = Math.round(initialSize + (fs - initialSize) * Math.min(nieClicks / STEPS, 1));
-      takBtn.style.width = newSize + 'px';
-      takBtn.style.height = newSize + 'px';
-      takBtn.style.fontSize = Math.floor(newSize * 0.18) + 'px';
-      takBtn.style.transition = 'width 220ms ease, height 220ms ease, font-size 220ms ease';
+      const fw = finalW();
+      const fh = finalH();
+      // linear interpolation to fullscreen
+      const newW = Math.round(initialSize + (fw - initialSize) * Math.min(nieClicks / STEPS, 1));
+      const newH = Math.round(initialSize + (fh - initialSize) * Math.min(nieClicks / STEPS, 1));
+      takBtn.style.width = newW + "px";
+      takBtn.style.height = newH + "px";
+      takBtn.style.fontSize = Math.floor(Math.min(newW,newH) * 0.12) + "px";
+      takBtn.style.transition = "width 260ms ease, height 260ms ease, font-size 260ms ease";
 
+      // small feedback animation for NIE
       nieBtn.animate([{transform:'translateY(0)'},{transform:'translateY(-8px)'},{transform:'translateY(0)'}], {duration:220, easing:'ease-out'});
 
       if(nieClicks >= STEPS){
-        // MAKE THE GREEN BUTTON FULL-SCREEN and block everything else
-        takBtn.style.position = 'fixed';
-        takBtn.style.left = '0';
-        takBtn.style.top = '0';
-        takBtn.style.transform = 'none';
-        takBtn.style.width = '100vw';
-        takBtn.style.height = '100vh';
-        takBtn.style.borderRadius = '0';
-        // big font based on viewport so it's readable but not huge overflow
-        const bigFont = Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.18);
-        takBtn.style.fontSize = bigFont + 'px';
-        takBtn.style.zIndex = '9999';
-        takBtn.style.boxShadow = '0 0 0 rgba(0,0,0,0)';
-        // disable interactions on body except this button
-        document.body.style.pointerEvents = 'none';
-        takBtn.style.pointerEvents = 'auto';
-        // hide the red "nie" visually & disable it
-        nieBtn.style.pointerEvents = 'none';
-        nieBtn.style.opacity = '0';
+        // Make green button truly FULLSCREEN (100% both dims), positioned at top-left,
+        // so it doesn't sit half under the page — it covers everything and is the only clickable thing.
+        takBtn.style.position = "fixed";
+        takBtn.style.left = "0";
+        takBtn.style.top = "0";
+        takBtn.style.transform = "none";
+        takBtn.style.width = "100vw";
+        takBtn.style.height = "100vh";
+        takBtn.style.borderRadius = "0";
+        // large readable font (proportional)
+        const bigFont = Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.15);
+        takBtn.style.fontSize = bigFont + "px";
+        takBtn.style.zIndex = "9999";
+        takBtn.style.boxShadow = "none";
+
+        // block all other interactions except this button
+        document.body.style.pointerEvents = "none";
+        takBtn.style.pointerEvents = "auto";
+
+        // hide and disable the red "nie" button
+        nieBtn.style.pointerEvents = "none";
+        nieBtn.style.opacity = "0";
+
+        // show GIF preview behind (so user sees it) — the overlay will re-show on click
+        const gif = document.getElementById("catsGif");
+        gif.classList.add("show");
+        gif.style.width = Math.min(window.innerWidth * 0.9, 1100) + "px";
       }
     });
 
-    // clicking the green button triggers celebration (immediate or final)
-    takBtn.addEventListener('click', (e)=>{
-      // if pointer events disabled for body, this is the only clickable element and will fire
+    // clicking TAK triggers celebration immediately (or if already fullscreen, also triggers)
+    takBtn.addEventListener("click", (e)=>{
+      // If body pointerEvents was disabled, takBtn was the only clickable element and will fire.
       triggerCelebration();
     });
 
-    // ensure resize keeps full-screen coverage and font scaling if window changes
-    window.addEventListener('resize', ()=>{
-      if(nieClicks >= STEPS){
-        takBtn.style.width = '100vw';
-        takBtn.style.height = '100vh';
-        const bigFont = Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.18);
-        takBtn.style.fontSize = bigFont + 'px';
-      } else if(nieClicks > 0 && nieClicks < STEPS){
-        const fs = finalSize();
-        const newSize = Math.round(initialSize + (fs - initialSize) * Math.min(nieClicks / STEPS, 1));
-        takBtn.style.width = newSize + 'px';
-        takBtn.style.height = newSize + 'px';
-        takBtn.style.fontSize = Math.floor(newSize * 0.18) + 'px';
+    // adapt sizes on resize
+    window.addEventListener("resize", ()=>{
+      if(nieClicks > 0 && nieClicks < STEPS){
+        const fw = finalW(), fh = finalH();
+        const newW = Math.round(initialSize + (fw - initialSize) * Math.min(nieClicks / STEPS, 1));
+        const newH = Math.round(initialSize + (fh - initialSize) * Math.min(nieClicks / STEPS, 1));
+        takBtn.style.width = newW + "px";
+        takBtn.style.height = newH + "px";
+        takBtn.style.fontSize = Math.floor(Math.min(newW,newH) * 0.12) + "px";
+      } else if(nieClicks >= STEPS){
+        takBtn.style.width = "100vw";
+        takBtn.style.height = "100vh";
+        const bigFont = Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.15);
+        takBtn.style.fontSize = bigFont + "px";
+        document.getElementById("catsGif").style.width = Math.min(window.innerWidth * 0.9, 1100) + "px";
       }
     });
+
   } // end initPage3
 
-  /* Celebration: firework + show GIF (kissing cat) */
+  /* Celebration function */
   function triggerCelebration(){
-    // allow overlay to appear above everything
-    const overlay = document.getElementById('overlay');
-    const explosion = document.getElementById('explosion');
-    const gif = document.getElementById('catsGif');
+    const overlay = document.getElementById("overlay");
+    const explosion = document.getElementById("explosion");
+    const gif = document.getElementById("catsGif");
 
-    // clear previous
-    explosion.innerHTML = '';
-    overlay.classList.add('show');
+    // ensure other interactions not possible while celebrating
+    document.body.style.pointerEvents = "none";
 
-    const colors = ['#ff2d55','#ff9aa2','#ffd166','#ff6b6b','#ff3b30','#ffd6e8'];
-    const num = 100;
+    // reset explosion area
+    explosion.innerHTML = "";
+    overlay.classList.add("show");
+
+    const colors = ["#ff2d55","#ff9aa2","#ffd166","#ff6b6b","#ff3b30","#ffd6e8"];
+    const num = 90;
     const cx = window.innerWidth/2;
     const cy = window.innerHeight/2;
     for(let i=0;i<num;i++){
-      const s = document.createElement('div');
-      s.className = 'spark';
-      if(Math.random() < 0.5){
+      const s = document.createElement("div");
+      s.className = "spark";
+      if(Math.random() < 0.55){
         s.style.background = colors[Math.floor(Math.random()*colors.length)];
-        const size = 8 + Math.random()*28;
-        s.style.width = s.style.height = size + 'px';
-        s.style.borderRadius = '50%';
+        const size = 8 + Math.random()*26;
+        s.style.width = s.style.height = size + "px";
+        s.style.borderRadius = "50%";
       } else {
-        s.textContent = '❤️';
-        s.style.fontSize = (10 + Math.random()*28) + 'px';
-        s.style.width = s.style.height = 'auto';
-        s.style.lineHeight = '1';
-        s.style.padding = '2px';
-        s.style.background = 'transparent';
+        s.textContent = "❤️";
+        s.style.fontSize = (10 + Math.random()*28) + "px";
+        s.style.width = s.style.height = "auto";
+        s.style.lineHeight = "1";
+        s.style.padding = "2px";
+        s.style.background = "transparent";
       }
-      s.style.left = (cx + (Math.random()*40-20)) + 'px';
-      s.style.top = (cy + (Math.random()*40-20)) + 'px';
+      s.style.left = (cx + (Math.random()*80-40)) + "px";
+      s.style.top = (cy + (Math.random()*80-40)) + "px";
       const angle = Math.random()*Math.PI*2;
       const radius = 120 + Math.random()*600;
-      const tx = Math.cos(angle) * radius + 'px';
-      const ty = Math.sin(angle) * radius + 'px';
-      s.style.setProperty('--tx', tx);
-      s.style.setProperty('--ty', ty);
+      const tx = Math.cos(angle) * radius + "px";
+      const ty = Math.sin(angle) * radius + "px";
+      s.style.setProperty("--tx", tx);
+      s.style.setProperty("--ty", ty);
       s.style.opacity = 1;
-      s.style.zIndex = 220 + Math.floor(Math.random()*80);
+      s.style.zIndex = 920 + Math.floor(Math.random()*80);
       explosion.appendChild(s);
       setTimeout(()=> s.remove(), 1600 + Math.random()*900);
     }
 
-    // extra falling hearts on overlay
+    // falling hearts during overlay
     for(let j=0;j<36;j++){
-      const h = document.createElement('div');
-      h.className = 'falling';
-      h.textContent = '💖';
-      h.style.left = Math.random()*100 + 'vw';
-      h.style.fontSize = 18 + Math.random()*30 + 'px';
-      h.style.animationDuration = 1.2 + Math.random()*2 + 's';
-      h.style.top = (-20 - Math.random()*120) + 'px';
+      const h = document.createElement("div");
+      h.className = "falling";
+      h.textContent = "💖";
+      h.style.left = Math.random()*100 + "vw";
+      h.style.fontSize = 18 + Math.random()*30 + "px";
+      h.style.animationDuration = 1.2 + Math.random()*2 + "s";
+      h.style.top = (-20 - Math.random()*120) + "px";
       overlay.appendChild(h);
       setTimeout(()=> h.remove(), 3200);
     }
 
-    // small flash
-    const flash = document.createElement('div');
-    flash.style.position = 'fixed';
+    // flash
+    const flash = document.createElement("div");
+    flash.style.position = "fixed";
     flash.style.inset = 0;
-    flash.style.background = 'radial-gradient(circle at center, rgba(255,255,255,0.98), rgba(255,255,255,0.15) 40%, transparent 60%)';
-    flash.style.zIndex = 260;
-    flash.style.pointerEvents = 'none';
+    flash.style.background = "radial-gradient(circle at center, rgba(255,255,255,0.98), rgba(255,255,255,0.2) 40%, transparent 60%)";
+    flash.style.zIndex = 960;
+    flash.style.pointerEvents = "none";
     document.body.appendChild(flash);
     setTimeout(()=> flash.remove(), 420);
 
-    // show kissing-cat GIF centered big
-    gif.classList.add('show');
-    gif.style.width = Math.min(window.innerWidth * 0.85, 900) + 'px';
+    // show GIF bigger & centered
+    gif.classList.add("show");
+    gif.style.width = Math.min(window.innerWidth * 0.9, 1100) + "px";
 
-    // after celebration allow closing overlay by clicking outside gif
-    overlay.addEventListener('click', (e)=>{
+    // close overlay when click outside GIF (one-time)
+    overlay.addEventListener("click", (e)=>{
       if(e.target === overlay){
-        overlay.classList.remove('show');
-        explosion.innerHTML = '';
-        gif.classList.remove('show');
-        // re-enable body pointer events (in case we left them disabled)
-        document.body.style.pointerEvents = '';
+        overlay.classList.remove("show");
+        explosion.innerHTML = "";
+        gif.classList.remove("show");
+        // allow interactions after celebration
+        document.body.style.pointerEvents = "";
       }
     }, { once:true });
 
-    // also after some seconds, re-enable body interactions (safety)
+    // safety: re-enable interactions after 4s in case overlay isn't closed
     setTimeout(()=>{
-      document.body.style.pointerEvents = '';
-    }, 3000);
+      document.body.style.pointerEvents = "";
+    }, 4000);
   }
 
-  // gentle periodic falling
+  // small periodic falling to keep alive
   setInterval(()=> {
-    const active = document.querySelector('.page.active') || page1;
-    falling(active, Math.random() < 0.5 ? '❤️' : '⭐', 4);
+    const active = document.querySelector(".page.active") || page1;
+    falling(active, Math.random() < 0.5 ? "❤️" : "⭐", 4);
   }, 1400);
 
-  // lazy init page3 when visible
+  // lazy init page3 when it's activated
   const observer = new MutationObserver(muts=>{
     muts.forEach(m=>{
       if(m.attributeName === 'class' && m.target === page3 && page3.classList.contains('active')){
-        if(!page3.dataset.init){ page3.dataset.init = '1'; initPage3(); }
+        if(!page3.dataset.init){ page3.dataset.init = "1"; initPage3(); }
       }
-    })
+    });
   });
   observer.observe(page3, { attributes: true });
 
@@ -417,4 +429,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
-
