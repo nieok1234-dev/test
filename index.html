@@ -5,248 +5,91 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Dla Ciebie ❤️</title>
 <style>
-  * { box-sizing: border-box; }
-  html,body { height:100%; }
-  body {
-    margin: 0;
-    /* ciemniejszy różowy gradient */
-    background: linear-gradient(180deg,#ff6fa8 0%, #ff2d71 100%);
-    overflow: hidden;
-    font-family: "Comic Sans MS", "Marker Felt", cursive, sans-serif;
-    -webkit-font-smoothing:antialiased;
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background: linear-gradient(180deg,#ff5fa0 0%, #ff2d71 100%); /* ciemniejszy różowy */
+    overflow:hidden;
+    font-family:"Comic Sans MS", "Marker Felt", cursive, sans-serif;
   }
 
-  .page { position:absolute; inset:0; display:none; }
-  .page.active { display:block; }
+  .page{position:absolute;inset:0;display:none}
+  .page.active{display:block}
 
-  .falling {
-    position: absolute;
-    top: -80px;
-    pointer-events: none;
-    opacity: 0.9;
-    user-select: none;
-    transform-origin: center;
-    animation: fall linear infinite;
-  }
-  @keyframes fall {
-    to { transform: translateY(120vh) rotate(360deg); }
-  }
+  .falling{position:absolute;top:-80px;pointer-events:none;opacity:0.9;user-select:none;transform-origin:center;animation:fall linear infinite}
+  @keyframes fall{ to{ transform: translateY(120vh) rotate(360deg);} }
 
-  .flower {
+  .flower{position:absolute;font-size:24px;pointer-events:none;animation:float 6s ease-in-out infinite}
+  @keyframes float{50%{transform:translateY(-10px)}}
+
+  .heart-box{
     position:absolute;
-    font-size: 24px;
-    pointer-events: none;
-    animation: float 6s ease-in-out infinite;
-  }
-  @keyframes float { 50% { transform: translateY(-10px); } }
-
-  .heart-box {
-    position: absolute;
-    width: 260px;
-    height: 240px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
+    width:280px;
+    height:260px;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
     display:flex;
     align-items:center;
     justify-content:center;
     text-align:center;
-    color: white;
-    transition: 0.6s ease;
-    z-index: 5;
-  }
-
-  /* serce: pseudo-elementy mniejsze i pod spodem (z-index) */
-  .heart {
-    position: relative;
-    width: 180px;
-    height: 160px;
-    background: #ff2d55;
-    transform: rotate(-45deg);
-    border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow: visible;
-  }
-  .heart:before, .heart:after {
-    content: "";
-    position: absolute;
-    width: 60%;
-    height: 60%;
-    background: #ff2d55;
-    border-radius: 50%;
-    z-index: 0; /* poniżej treści */
-  }
-  .heart:before { top: -28%; left: 0%; }
-  .heart:after  { left: 40%; top: 0%; transform: rotate(90deg); }
-
-  .heart-content {
-    transform: rotate(45deg);
-    width: 140px;
-    padding: 10px;
-    font-size: 16px;
-    line-height: 1.2;
-    z-index: 2; /* pewnie nad pseudo-elementami */
-    position: relative;
-  }
-
-  button.btn {
-    margin-top: 12px;
-    padding: 10px 14px;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 15px;
-  }
-
-  .page3-container {
-    position:absolute;
-    inset:0;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:18px;
-    z-index:4;
-  }
-
-  .question {
-    font-size: 34px;
-    color:#6b0532;
-    text-shadow: 0 3px 10px rgba(0,0,0,0.12);
-    margin-bottom: 6vh;
-  }
-
-  .choices {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    display:flex;
-    gap: 12px;
-    align-items:center;
-    z-index:6;
-  }
-  .choice-tak {
-    background: #2ecc71;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-weight: 900;
-    transform-origin: center;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
-    transition: transform 200ms ease;
-  }
-  .choice-nie {
-    background: #ff3b30;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-weight: 900;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
-  }
-
-  /* duże serce na stronie 3 */
-  .big-heart {
-    position: relative;
-    width: 320px;
-    height: 280px;
-    transform: rotate(-45deg);
-    background: #ff2d55;
-    margin-bottom: 16px;
-    border-radius: 12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
-    z-index:5;
-    overflow: visible;
-  }
-  .big-heart:before, .big-heart:after {
-    content:"";
-    position:absolute;
-    width: 60%;
-    height: 60%;
-    background:#ff2d55;
-    border-radius:50%;
-    z-index:0;
-  }
-  .big-heart:before { top: -28%; left: 0%; }
-  .big-heart:after  { left: 40%; top: 0%; transform: rotate(90deg); }
-
-  .big-heart .inside {
-    transform: rotate(45deg);
     color:white;
-    text-align:center;
-    padding: 10px;
-    width:240px;
-    z-index:2;
+    z-index:5;
   }
 
-  .tak-text {
-    font-weight: 900;
-    letter-spacing: 1px;
-    user-select: none;
-    cursor: default;
-    transition: transform 220ms ease;
-    transform-origin: center;
-  }
-
-  .overlay {
-    position: fixed;
-    inset:0;
-    display:none;
+  /* SVG heart container */
+  .heart{
+    position:relative;
+    width:220px;
+    height:200px;
+    display:flex;
     align-items:center;
     justify-content:center;
-    background: rgba(0,0,0,0.35);
-    z-index: 200;
   }
-  .overlay.show { display:flex; }
-
-  .explosion { position: absolute; inset:0; pointer-events:none; overflow:visible; z-index:210; }
-
-  .spark {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    pointer-events: none;
-    opacity: 0.95;
-    transform: translate(-50%,-50%);
-    animation: fly 1000ms ease-out forwards;
+  .heart svg{
+    position:absolute;
+    left:0; top:0;
+    width:100%; height:100%;
+    z-index:0;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.12));
   }
-  @keyframes fly {
-    to { transform: translate(var(--tx), var(--ty)) scale(0.4); opacity: 0; }
+  .heart .heart-content{
+    position:relative;
+    z-index:2;
+    width:70%;
+    pointer-events:auto;
+    transform: none;
   }
 
-  /* GIF centrowany i duży */
-  .cats-gif {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    width: 640px;
-    height: auto;
-    z-index: 220;
-    border-radius: 14px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
-    overflow: hidden;
-    display:none;
-    background: white;
-  }
-  .cats-gif.show { display:block; }
+  button.btn{ margin-top:12px; padding:10px 14px; border-radius:12px; border:none; cursor:pointer; font-weight:700; font-size:15px }
 
-  @media (max-width:720px){
-    .cats-gif { width: 90vw; }
-    .big-heart { width: 260px; height: 220px; }
-  }
+  .page3-container{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:4}
+
+  .question{font-size:34px;color:#6b0532;text-shadow:0 3px 10px rgba(0,0,0,0.12);margin-bottom:6vh}
+
+  .choices{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;gap:12px;align-items:center;z-index:6}
+  .choice-tak{background:#2ecc71;color:white;padding:8px 12px;border-radius:8px;font-weight:900;transform-origin:center;font-size:14px;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,0.12);transition:transform 200ms}
+  .choice-nie{background:#ff3b30;color:white;padding:8px 12px;border-radius:8px;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,0.12)}
+
+  /* big heart (page 3) - also using SVG */
+  .big-heart{position:relative;width:360px;height:320px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;z-index:5}
+  .big-heart svg{position:absolute;left:0;top:0;width:100%;height:100%;z-index:0;filter: drop-shadow(0 12px 30px rgba(0,0,0,0.18))}
+  .big-heart .inside{position:relative;z-index:2;width:78%;text-align:center;color:white}
+
+  .tak-text{font-weight:900;letter-spacing:1px;user-select:none;cursor:default;transition:font-size 260ms ease, transform 260ms ease; transform-origin:center}
+
+  .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);z-index:200}
+  .overlay.show{display:flex}
+  .explosion{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:210}
+  .spark{position:absolute;width:12px;height:12px;border-radius:50%;pointer-events:none;opacity:0.95;transform:translate(-50%,-50%);animation:fly 1000ms ease-out forwards}
+  @keyframes fly{ to{ transform: translate(var(--tx), var(--ty)) scale(0.4); opacity:0; } }
+
+  /* centered big GIF (much larger, centered) */
+  .cats-gif{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:720px;height:auto;z-index:220;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,0.35);overflow:hidden;display:none;background:white}
+  .cats-gif.show{display:block}
+
+  @media (max-width:840px){ .cats-gif{width:92vw} .big-heart{width:280px;height:240px} .heart-box{width:240px;height:220px} }
 </style>
 </head>
 <body>
@@ -257,30 +100,29 @@
 
   <div id="overlay" class="overlay" aria-hidden="true">
     <div id="explosion" class="explosion"></div>
-    <img id="catsGif" class="cats-gif" src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" alt="szczęśliwe koty skaczące" />
+    <!-- now centered big GIF of happy jumping cats -->
+    <img id="catsGif" class="cats-gif" src="https://media.giphy.com/media/3o6gbbuLW76jkt8vIc/giphy.gif" alt="szczęśliwe koty skaczące" />
   </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+
   const page1 = document.getElementById("page1");
   const page2 = document.getElementById("page2");
   const page3 = document.getElementById("page3");
-  const pages = [page1, page2, page3];
+  const pages = [page1,page2,page3];
 
-  function showPage(n){
-    pages.forEach(p => p.classList.remove("active"));
-    pages[n].classList.add("active");
-  }
+  function showPage(n){ pages.forEach(p=>p.classList.remove("active")); pages[n].classList.add("active"); }
 
-  function falling(parent, symbol, count){
+  function falling(parent,symbol,count){
     for(let i=0;i<count;i++){
       const el = document.createElement("div");
       el.className = "falling";
       el.textContent = symbol;
-      el.style.left = (Math.random()*100) + "vw";
-      el.style.fontSize = (12 + Math.random()*30) + "px";
-      el.style.animationDuration = (4 + Math.random()*6) + "s";
-      el.style.opacity = 0.7 + Math.random()*0.3;
+      el.style.left = (Math.random()*100)+"vw";
+      el.style.fontSize = (12 + Math.random()*30)+"px";
+      el.style.animationDuration = (4 + Math.random()*6)+"s";
+      el.style.opacity = 0.6 + Math.random()*0.4;
       el.style.transform = `rotate(${Math.random()*360}deg)`;
       el.style.top = (-20 - Math.random()*120) + "px";
       parent.appendChild(el);
@@ -301,13 +143,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* PAGE 1 */
-  falling(page1, "❤️", 60);
-  flowers(page1, ["🌸","🌺","🌷","🌼"], 18);
+  /* ---------- PAGE 1 ---------- */
+  falling(page1,"❤️",60);
+  flowers(page1,["🌸","🌺","🌷","🌼"],18);
+
   const box1 = document.createElement("div");
   box1.className = "heart-box";
+  // heart uses inline SVG (czyste serce, bez "kwadratu")
   box1.innerHTML = `
     <div class="heart">
+      <svg viewBox="0 0 32 29" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <path d="M23.6,0c-2.9,0-5.6,1.8-7.6,4.4C13,1.8,10.4,0,7.4,0C2.5,0,0,3.5,0,8.4c0,9.2,16,20.6,16,20.6S32,17.6,32,8.4 C32,3.5,28.5,0,23.6,0z" fill="#ff2d55"/>
+      </svg>
       <div class="heart-content">
         <h2 style="margin:0;font-size:20px">No hej to ja</h2>
         <p style="margin:8px 0 0;font-size:14px">Przygotowałem coś dla ciebie</p>
@@ -318,19 +165,22 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   `;
   page1.appendChild(box1);
-  document.getElementById("b1").addEventListener("click", () => showPage(1));
+  document.getElementById("b1").addEventListener("click", ()=> showPage(1));
 
-  /* PAGE 2 */
-  falling(page2, "❤️", 30);
-  falling(page2, "⭐", 20);
-  flowers(page2, ["🌻","🌹","🌼","🌺"], 22);
+  /* ---------- PAGE 2 ---------- */
+  falling(page2,"❤️",30);
+  falling(page2,"⭐",20);
+  flowers(page2,["🌻","🌹","🌼","🌺"],22);
 
   const heartWrapper = document.createElement("div");
   heartWrapper.className = "heart-box";
-  heartWrapper.style.width = "340px";
-  heartWrapper.style.height = "300px";
+  heartWrapper.style.width = "360px";
+  heartWrapper.style.height = "320px";
   heartWrapper.innerHTML = `
     <div class="heart" id="movingHeart">
+      <svg viewBox="0 0 32 29" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <path d="M23.6,0c-2.9,0-5.6,1.8-7.6,4.4C13,1.8,10.4,0,7.4,0C2.5,0,0,3.5,0,8.4c0,9.2,16,20.6,16,20.6S32,17.6,32,8.4 C32,3.5,28.5,0,23.6,0z" fill="#ff2d55"/>
+      </svg>
       <div class="heart-content" id="heartContent">
         <div id="ptext" style="font-size:16px;line-height:1.25">Jeszcze nie tu ale zaraz chciałbym cię o coś zapytać</div>
         <div style="margin-top:10px">
@@ -341,54 +191,52 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
   page2.appendChild(heartWrapper);
 
-  // usunąłem wierszyki o Lence — więc po pierwszym kliknięciu tekst zostaje BEZ ZMIANY, tylko przesuwa się
+  // usunąłem wierszyki o Lence — tekst zostaje, tylko serce się przesuwa
   let step = 0;
   const moveBtn = document.getElementById("moveBtn");
   const ptext = document.getElementById("ptext");
+  heartWrapper.style.left = "50%"; heartWrapper.style.top="50%"; heartWrapper.style.transform="translate(-50%,-50%)";
 
-  heartWrapper.style.left = "50%";
-  heartWrapper.style.top = "50%";
-  heartWrapper.style.transform = "translate(-50%,-50%)";
-
-  moveBtn.addEventListener("click", () => {
+  moveBtn.addEventListener("click", ()=>{
     step++;
-    if(step === 1){
-      // nie zmieniamy tekstu (usuń wierszyki o Lenie) — tylko przesuwamy
-      heartWrapper.style.top = "12%";
-      heartWrapper.style.left = "80%";
-      heartWrapper.style.transform = "translate(-50%,-50%)";
-    } else if(step === 2){
-      heartWrapper.style.top = "78%";
-      heartWrapper.style.left = "10%";
+    if(step===1){
+      heartWrapper.style.top="12%";
+      heartWrapper.style.left="80%";
+      heartWrapper.style.transform="translate(-50%,-50%)";
+    } else if(step===2){
+      heartWrapper.style.top="78%";
+      heartWrapper.style.left="10%";
       moveBtn.textContent = "oho i co teraz?";
-    } else if (step === 3){
-      heartWrapper.style.top = "50%";
-      heartWrapper.style.left = "50%";
+    } else if(step===3){
+      heartWrapper.style.top="50%";
+      heartWrapper.style.left="50%";
       moveBtn.textContent = "no dobra ale ostatnia rzecz";
     } else {
-      // przejdź do strony 3 i ją zainicjuj
-      showPage(2);
+      showPage(2); // przejdź do page3 (index 2)
       initPage3();
     }
   });
 
-  /* PAGE 3 init (lazy) */
+  /* ---------- PAGE 3 (lazy init) ---------- */
   function initPage3(){
     page3.innerHTML = "";
-    falling(page3, "❤️", 40);
-    falling(page3, "⭐", 40);
-    flowers(page3, ["🌸","🌷","🌹","🌺","🌼"], 26);
+    falling(page3,"❤️",40);
+    falling(page3,"⭐",40);
+    flowers(page3,["🌸","🌷","🌹","🌺","🌼"],26);
 
     const container = document.createElement("div");
     container.className = "page3-container";
     container.innerHTML = `
-      <div style="height:8vh;"></div>
+      <div style="height:8vh"></div>
       <div class="question">czy zostaniesz moją walentynką?</div>
       <div style="display:flex;align-items:center;justify-content:center;">
         <div class="big-heart" id="bigHeart">
+          <svg viewBox="0 0 32 29" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <path d="M23.6,0c-2.9,0-5.6,1.8-7.6,4.4C13,1.8,10.4,0,7.4,0C2.5,0,0,3.5,0,8.4c0,9.2,16,20.6,16,20.6S32,17.6,32,8.4 C32,3.5,28.5,0,23.6,0z" fill="#ff2d55"/>
+          </svg>
           <div class="inside">
             <div id="heartLines" style="margin-bottom:12px"></div>
-            <div class="tak-text" id="takText" style="font-size:28px; transform-origin:center;">TAK!!!</div>
+            <div class="tak-text" id="takText" style="font-size:28px">TAK!!!</div>
           </div>
         </div>
       </div>
@@ -406,131 +254,130 @@ document.addEventListener("DOMContentLoaded", () => {
     const bigHeart = document.getElementById("bigHeart");
 
     let nieClicks = 0;
-    const messages = ["ale jak to", "aha?", "😅", "no wezzz"];
+    const messages = ["ale jak to","aha?","😅","no wezzz"];
     let msgIndex = 0;
 
-    // ustawienia skali: równomierny przyrost — po 8 kliknięciach napis powinien wypełnić ekran
-    const INITIAL_SCALE = 1;
-    const FINAL_SCALE = 16; // docelowa skala (duża, by wypełnić ekran)
+    // linear growth parameters -> końcowy rozmiar to 90% mniejszej krawędzi okna
     const STEPS = 8;
-    const STEP_INC = (FINAL_SCALE - INITIAL_SCALE) / STEPS;
+    const initialFont = parseFloat(getComputedStyle(takText).fontSize) || 28;
+    function targetFont() {
+      return Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.9);
+    }
 
-    // początkowo przycisk "TAK" działa (można kliknąć natychmiast) — ale ma mniejszą skalę wizualną
     takBtn.style.transform = "scale(0.95)";
-    takBtn.style.transition = "transform 220ms ease";
+    takBtn.style.transition = "transform 200ms ease";
 
-    nieBtn.addEventListener("click", () => {
+    nieBtn.addEventListener("click", ()=>{
       nieClicks++;
-      // dodaj linię tekstu w big-heart (kolejno z tablicy messages)
-      const m = messages[msgIndex] || messages[messages.length - 1];
+      // dodaj linię w big heart
+      const m = messages[msgIndex] || messages[messages.length-1];
       const span = document.createElement("div");
       span.textContent = m;
       span.style.fontSize = "14px";
       span.style.margin = "6px 0";
       heartLines.appendChild(span);
-      msgIndex = Math.min(msgIndex + 1, messages.length - 1);
+      msgIndex = Math.min(msgIndex+1, messages.length-1);
 
-      // równomierny wzrost: przyrost stały
-      const newScale = INITIAL_SCALE + STEP_INC * nieClicks;
-      takText.style.transform = `scale(${newScale})`;
+      // równomierny wzrost font-size (liniowo)
+      const tf = targetFont();
+      const newFont = initialFont + (tf - initialFont) * Math.min(nieClicks / STEPS, 1);
+      takText.style.transition = "font-size 260ms ease";
+      takText.style.fontSize = newFont + "px";
 
-      // powiększaj też zielony przycisk wizualnie, żeby efekt był czytelny
+      // wizualne powiększenie zielonego przycisku
       takBtn.style.transform = `scale(${0.95 + nieClicks * 0.18})`;
 
-      // animacja przycisku NIE
-      nieBtn.animate([
-        { transform: 'translateY(0)' },
-        { transform: 'translateY(-8px)' },
-        { transform: 'translateY(0)' }
-      ], { duration: 240, easing: 'ease-out' });
+      // efekt przycisku NIE
+      nieBtn.animate([{transform:'translateY(0)'},{transform:'translateY(-8px)'},{transform:'translateY(0)'}], {duration:220, easing:'ease-out'});
 
-      // gdy osiągnięto 8 kliknięć — zrób stopniowe przejście do trybu "TAK pełen ekran"
+      // po osiągnięciu 8 kliknięć: wyśrodkuj i ustal finalny rozmiar (90% okna)
       if(nieClicks >= STEPS){
-        // delikatna płynna transformacja do pełnego ekranu
-        takText.style.transition = "transform 450ms cubic-bezier(.2,.9,.2,1)";
-        // ustaw ogromną skalę i styl tak, żeby zajął ekran stopniowo (już rośnie równomiernie).
-        takText.style.transform = `scale(${FINAL_SCALE})`;
-
-        // zmieniamy zielony przycisk tak, by zajął środek i był jedynym aktywnym elementem
-        takBtn.style.position = "fixed";
-        takBtn.style.left = "50%";
-        takBtn.style.top = "50%";
-        takBtn.style.transform = "translate(-50%,-50%) scale(20)";
-        takBtn.style.zIndex = "250";
-        takBtn.style.padding = "40px 60px";
-        takBtn.style.borderRadius = "0";
-        takBtn.style.fontSize = "110px";
-        takBtn.style.pointerEvents = "auto";
-        takBtn.textContent = "TAK!!!";
-        // unieś bigHeart wizualnie
-        bigHeart.style.zIndex = "240";
-
-        // zredukuj widoczność przycisku NIE (już nieklikalny)
+        const finalFont = tf;
+        // center the text and make clickable
+        takText.style.position = "fixed";
+        takText.style.left = "50%";
+        takText.style.top = "50%";
+        takText.style.transform = "translate(-50%,-50%)";
+        takText.style.fontSize = finalFont + "px";
+        takText.style.zIndex = 260;
+        takText.style.cursor = "pointer";
+        // hide/disable other controls
         nieBtn.style.pointerEvents = "none";
         nieBtn.style.opacity = "0.45";
-
-        // pokaż GIF na środku (ale nie od razu - po kliknięciu TAK)
-        document.getElementById("catsGif").classList.add("show");
+        takBtn.style.pointerEvents = "none"; // ensure only big TAK is clickable
+        // show GIF in background so user sees preview (GIF also shown on celebration)
+        const gif = document.getElementById("catsGif");
+        gif.classList.add("show");
+        gif.style.width = Math.min(window.innerWidth * 0.85, 900) + "px";
       }
     });
 
-    // kliknięcie TAK — jeśli nieClicks < 8 -> natychmiastowa celebracja; jeśli >=8 to finalizacja już wcześniej
-    takBtn.addEventListener("click", () => {
+    // kliknięcie TAK -> jeśli nikt nie klikał "nie" -> natychmiast celebracja
+    takBtn.addEventListener("click", ()=>{
       if(nieClicks < STEPS){
-        triggerCelebration(true); // natychmiast
+        triggerCelebration(true);
         return;
       }
-      // jeśli już był tryb pełnoekranowy, też celebrujemy
-      triggerCelebration(false);
+      // jeśli już był final state: kliknięcie tekstu TAK powinno celebrację
     });
 
-    bigHeart.addEventListener("click", () => {
-      bigHeart.animate([
-        { transform: 'rotate(-45deg) scale(1)' },
-        { transform: 'rotate(-45deg) scale(0.95)' },
-        { transform: 'rotate(-45deg) scale(1)' }
-      ], { duration: 280 });
+    // kliknięcie samego powiększonego napisu TAK (po 8 klikach)
+    takText.addEventListener("click", ()=>{
+      if(nieClicks >= STEPS){
+        triggerCelebration(false);
+      }
+    });
+
+    bigHeart.addEventListener("click", ()=>{
+      bigHeart.animate([{transform:'scale(1)'},{transform:'scale(0.97)'},{transform:'scale(1)'}], {duration:260});
+    });
+
+    // adapt target size on resize (jeśli zmieni się rozmiar okna)
+    window.addEventListener("resize", ()=>{
+      if(nieClicks > 0 && nieClicks < STEPS){
+        const tf = targetFont();
+        const newFont = initialFont + (tf - initialFont) * Math.min(nieClicks / STEPS, 1);
+        takText.style.fontSize = newFont + "px";
+      } else if(nieClicks >= STEPS){
+        const finalFont = targetFont();
+        takText.style.fontSize = finalFont + "px";
+        document.getElementById("catsGif").style.width = Math.min(window.innerWidth * 0.85, 900) + "px";
+      }
     });
   } // initPage3 end
 
-  /* Celebration function
-     if forceCenterGif == true -> center & enlarge gif immediately (for case "click TAK immediately")
-  */
+  /* Celebration */
   function triggerCelebration(forceCenterGif = false){
     const overlay = document.getElementById("overlay");
     const explosion = document.getElementById("explosion");
     const gif = document.getElementById("catsGif");
-
     overlay.classList.add("show");
-
-    // wyczyść poprzednie iskierki
     explosion.innerHTML = "";
 
-    // stwórz dużo "iskier" i serduszek
     const colors = ["#ff2d55","#ff9aa2","#ffd166","#ff6b6b","#ff3b30","#ffd6e8"];
-    const num = 70;
-    const cx = window.innerWidth / 2;
-    const cy = window.innerHeight / 2;
+    const num = 80;
+    const cx = window.innerWidth/2;
+    const cy = window.innerHeight/2;
     for(let i=0;i<num;i++){
       const s = document.createElement("div");
       s.className = "spark";
-      if(Math.random() < 0.55){
+      if(Math.random() < 0.5){
         s.style.background = colors[Math.floor(Math.random()*colors.length)];
-        s.style.width = s.style.height = (8 + Math.random()*18) + "px";
+        const size = 8 + Math.random()*22;
+        s.style.width = s.style.height = size + "px";
         s.style.borderRadius = "50%";
       } else {
         s.textContent = "❤️";
-        s.style.fontSize = (10 + Math.random()*22) + "px";
+        s.style.fontSize = (10 + Math.random()*28) + "px";
         s.style.width = s.style.height = "auto";
         s.style.lineHeight = "1";
         s.style.padding = "2px";
         s.style.background = "transparent";
       }
-      // start w centrum
       s.style.left = (cx + (Math.random()*40-20)) + "px";
       s.style.top = (cy + (Math.random()*40-20)) + "px";
       const angle = Math.random()*Math.PI*2;
-      const radius = 120 + Math.random()*420;
+      const radius = 120 + Math.random()*500;
       const tx = Math.cos(angle) * radius + "px";
       const ty = Math.sin(angle) * radius + "px";
       s.style.setProperty("--tx", tx);
@@ -541,8 +388,8 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(()=> s.remove(), 1400 + Math.random()*900);
     }
 
-    // dodatkowy spad serduszek na overlay
-    for(let j=0;j<30;j++){
+    // rain of hearts on overlay
+    for(let j=0;j<28;j++){
       const h = document.createElement("div");
       h.className = "falling";
       h.textContent = "💖";
@@ -564,13 +411,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(flash);
     setTimeout(()=> flash.remove(), 420);
 
-    // pokaż GIF kotków na środku i dość duży
+    // show centered GIF (big)
     gif.classList.add("show");
-    gif.style.width = Math.min(window.innerWidth * 0.8, 800) + "px";
+    gif.style.width = Math.min(window.innerWidth * 0.85, 900) + "px";
 
-    // kliknięcie poza GIF zamyka overlay
-    overlay.addEventListener("click", (e) => {
-      if(e.target === overlay) {
+    // click outside to close
+    overlay.addEventListener("click",(e)=>{
+      if(e.target === overlay){
         overlay.classList.remove("show");
         explosion.innerHTML = "";
         gif.classList.remove("show");
@@ -578,31 +425,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { once: true });
   }
 
-  // ciągłe drobne spadanie na aktywnej stronie
+  // light periodic falling
   setInterval(()=> {
     const active = document.querySelector(".page.active") || page1;
     falling(active, Math.random() < 0.5 ? "❤️" : "⭐", 4);
   }, 1400);
 
-  // Lazy init strony 3 jeśli ktoś przejdzie
-  const observer = new MutationObserver(mutations => {
-    mutations.forEach(m => {
-      if(m.attributeName === 'class') {
+  // lazy init page3 on activation
+  const observer = new MutationObserver(mutations=>{
+    mutations.forEach(m=>{
+      if(m.attributeName === 'class'){
         const target = m.target;
-        if(target === page3 && target.classList.contains('active')) {
-          if(!page3.dataset.init) {
-            page3.dataset.init = "1";
-            initPage3();
-          }
+        if(target === page3 && target.classList.contains('active')){
+          if(!page3.dataset.init){ page3.dataset.init = "1"; initPage3(); }
         }
       }
-    });
+    })
   });
   observer.observe(page3, { attributes: true });
 
-}); // DOMContentLoaded
+});
 </script>
 
 </body>
 </html>
+
 
