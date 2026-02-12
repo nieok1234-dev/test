@@ -7,13 +7,37 @@
 </head>
 <body>
 
-    <div class="container">
-        <h1>No hej, to ja 👋</h1>
-        <p>Przygotowałem coś dla Ciebie 💝</p>
-        <button onclick="pokazAlert()">To tu masz nacisnąć myszko 🐭</button>
+    <!-- EKRAN 1 -->
+    <div id="screen1" class="screen active">
+        <div class="container">
+            <h1>No hej, to ja 👋</h1>
+            <p>Przygotowałem coś dla Ciebie 💝</p>
+            <button onclick="nextScreen()">
+                To tu masz nacisnąć myszko 🐭
+            </button>
+        </div>
+    </div>
+
+    <!-- EKRAN 2 -->
+    <div id="screen2" class="screen">
+        <div class="decorations">
+            <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" class="floating cat">
+            <img src="https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif" class="floating cat">
+            <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=300" class="floating flower">
+            <img src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=300" class="floating flower">
+        </div>
+
+        <div class="container">
+            <h1>😳 No dobra...</h1>
+            <p>Jeszcze nie tu... ale zaraz chciałbym Cię o coś zapytać 💌</p>
+            <button>
+                Nie to jeszcze nie tu ale zaraz chciałbym się o coś ciebie zapytać 💕
+            </button>
+        </div>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
+
 

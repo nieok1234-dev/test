@@ -1,8 +1,6 @@
-function pokazAlert() {
-    alert("Kocham Cię najmocniej ❤️");
-}
+let heartInterval;
 
-// Spadające serduszka
+// SERDUSZKA
 function createHeart() {
     const heart = document.createElement("div");
     heart.classList.add("heart");
@@ -13,9 +11,27 @@ function createHeart() {
 
     document.body.appendChild(heart);
 
-    setTimeout(() => {
-        heart.remove();
-    }, 6000);
+    setTimeout(() => heart.remove(), 6000);
 }
 
-setInterval(createHeart, 300);
+// 3x WIĘCEJ SERDUSZEK
+function startManyHearts() {
+    clearInterval(heartInterval);
+    heartInterval = setInterval(createHeart, 100);
+}
+
+// NORMALNA ILOŚĆ
+function startNormalHearts() {
+    clearInterval(heartInterval);
+    heartInterval = setInterval(createHeart, 300);
+}
+
+// PRZEJŚCIE MIĘDZY EKRANAMI
+function nextScreen() {
+    document.getElementById("screen1").classList.remove("active");
+    document.getElementById("screen2").classList.add("active");
+    startNormalHearts();
+}
+
+// START
+startManyHearts();
