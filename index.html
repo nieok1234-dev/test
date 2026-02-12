@@ -212,9 +212,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const messages = ["ale jak to","aha?","😅","no wezzz"];
     let msgIndex = 0;
 
-    // IMPORTANT: now FULLSCREEN after 7 clicks; 8th user action is clicking the big green button to launch GIF
-    const STEPS_TO_FULLSCREEN = 7; // <-- full-screen after 7 'nie' clicks
-
+    // now: fullscreen after 7 'nie' clicks (and remove 'nie' button)
+    const STEPS_TO_FULLSCREEN = 7;
     const initialSize = 110;
     takBtn.style.width = initialSize + "px";
     takBtn.style.height = initialSize + "px";
@@ -235,7 +234,6 @@ document.addEventListener("DOMContentLoaded", () => {
       heartLines.appendChild(span);
       msgIndex = Math.min(msgIndex + 1, messages.length-1);
 
-      // compute linear interpolation of size toward fullscreen at step STEPS_TO_FULLSCREEN
       const fw = window.innerWidth;
       const fh = window.innerHeight;
       const ratio = Math.min(nieClicks / STEPS_TO_FULLSCREEN, 1);
@@ -249,9 +247,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       nieBtn.animate([{transform:'translateY(0)'},{transform:'translateY(-8px)'},{transform:'translateY(0)'}], {duration:220, easing:'ease-out'});
 
-      // WHEN reaching the target step (7 clicks) -> make green button cover the whole viewport immediately
+      // ONCE reach the threshold: REMOVE the "nie" button and make TAK occupy the whole viewport immediately
       if(nieClicks >= STEPS_TO_FULLSCREEN){
-        // FULLSCREEN button: cover entire viewport, top-left 0,0
+        // remove "nie" button entirely so nothing hides TAK
+        if(nieBtn && nieBtn.parentNode) {
+          try { nieBtn.parentNode.removeChild(nieBtn); } catch(e) {}
+        }
+
+        // make TAK full viewport, top-left
         takBtn.style.position = "fixed";
         takBtn.style.left = "0";
         takBtn.style.top = "0";
@@ -260,57 +263,52 @@ document.addEventListener("DOMContentLoaded", () => {
         takBtn.style.height = "100vh";
         takBtn.style.borderRadius = "0";
         takBtn.style.fontSize = Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.15) + "px";
-        takBtn.style.zIndex = "9999";
+        takBtn.style.zIndex = "2147483646"; // very high to avoid being under anything
         takBtn.style.boxShadow = "none";
-
-        // hide & disable 'nie'
-        nieBtn.style.opacity = "0";
-        nieBtn.style.pointerEvents = "none";
-
-        // mark full state so takBtn click triggers celebration
+        takBtn.style.cursor = "pointer";
         takBtn.dataset.full = "1";
 
-        // show big GIF in background as preview (overlay will show again on celebration)
+        // show GIF preview behind (overlay will show on actual click)
         const gif = document.getElementById("catsGif");
         gif.classList.add("show");
-        gif.style.width = Math.min(window.innerWidth * 0.9, 1100) + "px";
+        gif.style.width = Math.min(window.innerWidth * 0.9, 1200) + "px";
       }
     });
 
-    // clicking TAK: before full state => immediate celebration,
-    // after full state (after 7 'nie') => user clicks the full-screen green to launch celebration
-    takBtn.addEventListener("click", (e)=>{
-      const isFull = takBtn.dataset.full === "1";
-      if(!isFull){
-        // normal immediate celebration (user clicked TAK early)
-        triggerCelebration();
-        return;
-      }
-      // if full-screen state, clicking it now triggers celebration
+    // clicking TAK triggers celebration immediately (if clicked before full state) or after fullscreen (when only TAK remains)
+    takBtn.addEventListener("click", ()=>{
       triggerCelebration();
     });
 
-    // resize handling
+    // keep size if resized
     window.addEventListener("resize", ()=>{
       if(takBtn.dataset.full === "1"){
         takBtn.style.width = "100vw";
         takBtn.style.height = "100vh";
         takBtn.style.fontSize = Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.15) + "px";
-        document.getElementById("catsGif").style.width = Math.min(window.innerWidth * 0.9, 1100) + "px";
+        document.getElementById("catsGif").style.width = Math.min(window.innerWidth * 0.9, 1200) + "px";
+      } else {
+        // partial growth
+        const ratio = Math.min(nieClicks / STEPS_TO_FULLSCREEN, 1);
+        const newW = Math.round(initialSize + (window.innerWidth - initialSize) * ratio);
+        const newH = Math.round(initialSize + (window.innerHeight - initialSize) * ratio);
+        takBtn.style.width = newW + "px";
+        takBtn.style.height = newH + "px";
+        takBtn.style.fontSize = Math.floor(Math.min(newW,newH) * 0.12) + "px";
       }
     });
+
   } // initPage3 end
 
+  /* Celebration */
   function triggerCelebration(){
     const overlay = document.getElementById("overlay");
     const explosion = document.getElementById("explosion");
     const gif = document.getElementById("catsGif");
 
-    // cleanup and show overlay
     explosion.innerHTML = "";
     overlay.classList.add("show");
 
-    // fireworks/hearts
     const colors = ["#ff2d55","#ff9aa2","#ffd166","#ff6b6b","#ff3b30","#ffd6e8"];
     const num = 90;
     const cx = window.innerWidth/2;
@@ -345,7 +343,6 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(()=> s.remove(), 1600 + Math.random()*900);
     }
 
-    // hearts raining on overlay
     for(let j=0;j<36;j++){
       const h = document.createElement("div");
       h.className = "falling";
@@ -358,7 +355,6 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(()=> h.remove(), 3200);
     }
 
-    // flash
     const flash = document.createElement("div");
     flash.style.position = "fixed";
     flash.style.inset = 0;
@@ -370,9 +366,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // show GIF centered, larger
     gif.classList.add("show");
-    gif.style.width = Math.min(window.innerWidth * 0.9, 1100) + "px";
+    gif.style.width = Math.min(window.innerWidth * 0.9, 1200) + "px";
 
-    // click outside GIF closes overlay
     overlay.addEventListener("click",(e)=>{
       if(e.target === overlay){
         overlay.classList.remove("show");
@@ -381,13 +376,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }, { once:true });
 
-    // safety: after 4s ensure interactions re-enabled (overlay close will also re-enable)
-    setTimeout(()=> {
-      // nothing to re-enable here because we no longer set pointer-events on body
-    }, 4000);
   }
 
-  // small ambient falling
+  // ambient falling
   setInterval(()=> {
     const active = document.querySelector(".page.active") || page1;
     falling(active, Math.random() < 0.5 ? "❤️" : "⭐", 4);
@@ -408,4 +399,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
