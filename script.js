@@ -1,93 +1,54 @@
-let heartInterval, starInterval, petalInterval;
-let stage = 0;
+let heartInterval;
+let starInterval;
 
-function spawn(cls, emoji) {
-    const el = document.createElement("div");
-    el.classList.add(cls);
-    el.innerHTML = emoji;
-    el.style.left = Math.random() * 100 + "vw";
-    el.style.animationDuration = (3 + Math.random() * 3) + "s";
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 7000);
+// SERDUSZKO
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
 }
 
-function hearts(rate) {
+// GWIAZDA
+function createStar() {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    star.innerHTML = "✨";
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.animationDuration = (3 + Math.random() * 3) + "s";
+    document.body.appendChild(star);
+    setTimeout(() => star.remove(), 6000);
+}
+
+// 5x WIĘCEJ SERDUSZEK
+function startMegaHearts() {
     clearInterval(heartInterval);
-    heartInterval = setInterval(() => spawn("heart", "❤️"), rate);
+    heartInterval = setInterval(createHeart, 60);
 }
 
-function stars(rate) {
+// NORMAL
+function startNormalHearts() {
+    clearInterval(heartInterval);
+    heartInterval = setInterval(createHeart, 300);
+}
+
+// GWIAZDY
+function startStars() {
     clearInterval(starInterval);
-    starInterval = setInterval(() => spawn("star", "✨"), rate);
+    starInterval = setInterval(createStar, 300);
 }
 
-function petals(rate) {
-    clearInterval(petalInterval);
-    petalInterval = setInterval(() => spawn("petal", "🌸"), rate);
-}
-
-/* START */
-hearts(60);
-petals(180);
-
-/* ZMIANA EKRANU */
+// PRZEJŚCIE
 function nextScreen() {
-    screen1.classList.remove("active");
-    screen2.classList.add("active");
+    document.getElementById("screen1").classList.remove("active");
+    document.getElementById("screen2").classList.add("active");
 
-    hearts(250);
-    stars(300);
-    petals(350);
+    startNormalHearts();
+    startStars();
 }
 
-/* ZABAWA KWADRATEM */
-function moveBox() {
-    const box = document.getElementById("magicBox");
-    const btn = document.getElementById("btn2");
-    const text = document.getElementById("text2");
-
-    if (stage === 0) {
-        box.style.position = "fixed";
-        box.style.top = "20px";
-        box.style.right = "20px";
-        text.style.display = "none";
-        btn.innerText = "Żartowałem 😈";
-        stage = 1;
-    }
-    else if (stage === 1) {
-        box.style.top = "";
-        box.style.right = "";
-        box.style.bottom = "20px";
-        box.style.left = "20px";
-        btn.innerText = "Oho i co teraz? 😳";
-        stage = 2;
-    }
-    else if (stage === 2) {
-        finalCat();
-        stage = 3;
-    }
-    else {
-        screen2.classList.remove("active");
-        screen3.classList.add("active");
-    }
-}
-
-/* KOTEK */
-function finalCat() {
-    const cat = document.getElementById("cat");
-    cat.classList.add("active");
-
-    setTimeout(() => {
-        cat.classList.remove("active");
-
-        const box = document.getElementById("magicBox");
-        const btn = document.getElementById("btn2");
-
-        box.style.position = "";
-        box.style.top = "";
-        box.style.right = "";
-        box.style.bottom = "";
-        box.style.left = "";
-        btn.innerText = "No dobra ale ostatnia rzecz 😳";
-    }, 3000);
-}
+// START
+startMegaHearts();
