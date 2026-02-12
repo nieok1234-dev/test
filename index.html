@@ -9,7 +9,7 @@
   html,body{height:100%}
   body{
     margin:0;
-    background: linear-gradient(180deg,#ff5fa0 0%, #ff2d71 100%); /* ciemniejszy różowy */
+    background: linear-gradient(180deg,#ff5fa0 0%, #ff2d71 100%);
     overflow:hidden;
     font-family:"Comic Sans MS", "Marker Felt", cursive, sans-serif;
   }
@@ -38,46 +38,28 @@
     z-index:5;
   }
 
-  /* SVG heart container */
-  .heart{
-    position:relative;
-    width:220px;
-    height:200px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .heart svg{
-    position:absolute;
-    left:0; top:0;
-    width:100%; height:100%;
-    z-index:0;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.12));
-  }
-  .heart .heart-content{
-    position:relative;
-    z-index:2;
-    width:70%;
-    pointer-events:auto;
-    transform: none;
-  }
+  .heart{ position:relative; width:220px; height:200px; display:flex; align-items:center; justify-content:center; }
+  .heart svg{ position:absolute; left:0; top:0; width:100%; height:100%; z-index:0; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.12)); }
+  .heart .heart-content{ position:relative; z-index:2; width:70%; pointer-events:auto; }
 
   button.btn{ margin-top:12px; padding:10px 14px; border-radius:12px; border:none; cursor:pointer; font-weight:700; font-size:15px }
 
   .page3-container{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:4}
-
   .question{font-size:34px;color:#6b0532;text-shadow:0 3px 10px rgba(0,0,0,0.12);margin-bottom:6vh}
 
   .choices{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;gap:12px;align-items:center;z-index:6}
-  .choice-tak{background:#2ecc71;color:white;padding:8px 12px;border-radius:8px;font-weight:900;transform-origin:center;font-size:14px;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,0.12);transition:transform 200ms}
+  .choice-tak{
+    background:#2ecc71;color:white;padding:8px 12px;border-radius:8px;font-weight:900;transform-origin:center;font-size:14px;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,0.12);
+    transition: width 260ms ease, height 260ms ease, transform 220ms ease, font-size 220ms ease;
+    display:flex;align-items:center;justify-content:center;
+  }
   .choice-nie{background:#ff3b30;color:white;padding:8px 12px;border-radius:8px;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,0.12)}
 
-  /* big heart (page 3) - also using SVG */
   .big-heart{position:relative;width:360px;height:320px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;z-index:5}
   .big-heart svg{position:absolute;left:0;top:0;width:100%;height:100%;z-index:0;filter: drop-shadow(0 12px 30px rgba(0,0,0,0.18))}
   .big-heart .inside{position:relative;z-index:2;width:78%;text-align:center;color:white}
 
-  .tak-text{font-weight:900;letter-spacing:1px;user-select:none;cursor:default;transition:font-size 260ms ease, transform 260ms ease; transform-origin:center}
+  /* removed centered TAK text; only heartLines remain */
 
   .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);z-index:200}
   .overlay.show{display:flex}
@@ -85,7 +67,6 @@
   .spark{position:absolute;width:12px;height:12px;border-radius:50%;pointer-events:none;opacity:0.95;transform:translate(-50%,-50%);animation:fly 1000ms ease-out forwards}
   @keyframes fly{ to{ transform: translate(var(--tx), var(--ty)) scale(0.4); opacity:0; } }
 
-  /* centered big GIF (much larger, centered) */
   .cats-gif{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:720px;height:auto;z-index:220;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,0.35);overflow:hidden;display:none;background:white}
   .cats-gif.show{display:block}
 
@@ -100,13 +81,12 @@
 
   <div id="overlay" class="overlay" aria-hidden="true">
     <div id="explosion" class="explosion"></div>
-    <!-- now centered big GIF of happy jumping cats -->
-    <img id="catsGif" class="cats-gif" src="https://media.giphy.com/media/3o6gbbuLW76jkt8vIc/giphy.gif" alt="szczęśliwe koty skaczące" />
+    <!-- PRZYWRÓCONY GIF z całującymi kotami (tamten, którego prosiłeś) -->
+    <img id="catsGif" class="cats-gif" src="https://media.giphy.com/media/3oEduSbSGpGaRX2Vri/giphy.gif" alt="całujące się koty" />
   </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-
   const page1 = document.getElementById("page1");
   const page2 = document.getElementById("page2");
   const page3 = document.getElementById("page3");
@@ -143,13 +123,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* ---------- PAGE 1 ---------- */
+  /* PAGE1 */
   falling(page1,"❤️",60);
   flowers(page1,["🌸","🌺","🌷","🌼"],18);
-
   const box1 = document.createElement("div");
   box1.className = "heart-box";
-  // heart uses inline SVG (czyste serce, bez "kwadratu")
   box1.innerHTML = `
     <div class="heart">
       <svg viewBox="0 0 32 29" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -167,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
   page1.appendChild(box1);
   document.getElementById("b1").addEventListener("click", ()=> showPage(1));
 
-  /* ---------- PAGE 2 ---------- */
+  /* PAGE2 */
   falling(page2,"❤️",30);
   falling(page2,"⭐",20);
   flowers(page2,["🌻","🌹","🌼","🌺"],22);
@@ -191,12 +169,10 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
   page2.appendChild(heartWrapper);
 
-  // usunąłem wierszyki o Lence — tekst zostaje, tylko serce się przesuwa
+  // usunąłem wierszyki o Lence (tekst pozostaje)
   let step = 0;
   const moveBtn = document.getElementById("moveBtn");
-  const ptext = document.getElementById("ptext");
   heartWrapper.style.left = "50%"; heartWrapper.style.top="50%"; heartWrapper.style.transform="translate(-50%,-50%)";
-
   moveBtn.addEventListener("click", ()=>{
     step++;
     if(step===1){
@@ -212,12 +188,12 @@ document.addEventListener("DOMContentLoaded", () => {
       heartWrapper.style.left="50%";
       moveBtn.textContent = "no dobra ale ostatnia rzecz";
     } else {
-      showPage(2); // przejdź do page3 (index 2)
+      showPage(2);
       initPage3();
     }
   });
 
-  /* ---------- PAGE 3 (lazy init) ---------- */
+  /* PAGE3 */
   function initPage3(){
     page3.innerHTML = "";
     falling(page3,"❤️",40);
@@ -236,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </svg>
           <div class="inside">
             <div id="heartLines" style="margin-bottom:12px"></div>
-            <div class="tak-text" id="takText" style="font-size:28px">TAK!!!</div>
+            <!-- USUNIĘTY biały napis TAK (user prosił) -->
           </div>
         </div>
       </div>
@@ -247,7 +223,6 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     page3.appendChild(container);
 
-    const takText = document.getElementById("takText");
     const nieBtn = document.getElementById("nieBtn");
     const takBtn = document.getElementById("takBtn");
     const heartLines = document.getElementById("heartLines");
@@ -257,19 +232,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const messages = ["ale jak to","aha?","😅","no wezzz"];
     let msgIndex = 0;
 
-    // linear growth parameters -> końcowy rozmiar to 90% mniejszej krawędzi okna
     const STEPS = 8;
-    const initialFont = parseFloat(getComputedStyle(takText).fontSize) || 28;
-    function targetFont() {
-      return Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.9);
-    }
+    // initial & final sizes for the green square (in px). initial small, final = 90% of min viewport
+    const initialSize = 110; // initial button square size
+    function finalSize() { return Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.9); }
 
-    takBtn.style.transform = "scale(0.95)";
-    takBtn.style.transition = "transform 200ms ease";
+    // set initial explicit size
+    takBtn.style.width = initialSize + "px";
+    takBtn.style.height = initialSize + "px";
+    takBtn.style.borderRadius = "12px";
+    takBtn.style.fontSize = Math.floor(initialSize * 0.18) + "px";
+    takBtn.style.display = "flex";
+    takBtn.style.alignItems = "center";
+    takBtn.style.justifyContent = "center";
 
     nieBtn.addEventListener("click", ()=>{
       nieClicks++;
-      // dodaj linię w big heart
+      // add message inside big heart
       const m = messages[msgIndex] || messages[messages.length-1];
       const span = document.createElement("div");
       span.textContent = m;
@@ -278,69 +257,64 @@ document.addEventListener("DOMContentLoaded", () => {
       heartLines.appendChild(span);
       msgIndex = Math.min(msgIndex+1, messages.length-1);
 
-      // równomierny wzrost font-size (liniowo)
-      const tf = targetFont();
-      const newFont = initialFont + (tf - initialFont) * Math.min(nieClicks / STEPS, 1);
-      takText.style.transition = "font-size 260ms ease";
-      takText.style.fontSize = newFont + "px";
+      // linear size increase for takBtn
+      const fs = finalSize();
+      const newSize = Math.round(initialSize + (fs - initialSize) * Math.min(nieClicks / STEPS, 1));
+      takBtn.style.width = newSize + "px";
+      takBtn.style.height = newSize + "px";
+      takBtn.style.fontSize = Math.floor(newSize * 0.18) + "px";
+      takBtn.style.transition = "width 240ms ease, height 240ms ease, font-size 240ms ease";
 
-      // wizualne powiększenie zielonego przycisku
-      takBtn.style.transform = `scale(${0.95 + nieClicks * 0.18})`;
-
-      // efekt przycisku NIE
+      // small "bounce" for NIE
       nieBtn.animate([{transform:'translateY(0)'},{transform:'translateY(-8px)'},{transform:'translateY(0)'}], {duration:220, easing:'ease-out'});
 
-      // po osiągnięciu 8 kliknięć: wyśrodkuj i ustal finalny rozmiar (90% okna)
       if(nieClicks >= STEPS){
-        const finalFont = tf;
-        // center the text and make clickable
-        takText.style.position = "fixed";
-        takText.style.left = "50%";
-        takText.style.top = "50%";
-        takText.style.transform = "translate(-50%,-50%)";
-        takText.style.fontSize = finalFont + "px";
-        takText.style.zIndex = 260;
-        takText.style.cursor = "pointer";
-        // hide/disable other controls
+        // make the green button central, fixed and occupying finalSize (90%)
+        const finalS = fs;
+        takBtn.style.position = "fixed";
+        takBtn.style.left = "50%";
+        takBtn.style.top = "50%";
+        takBtn.style.transform = "translate(-50%,-50%)";
+        takBtn.style.width = finalS + "px";
+        takBtn.style.height = finalS + "px";
+        takBtn.style.borderRadius = Math.max(12, Math.floor(finalS * 0.03)) + "px";
+        takBtn.style.fontSize = Math.floor(finalS * 0.12) + "px";
+        takBtn.style.zIndex = "260";
+        takBtn.style.boxShadow = "0 30px 80px rgba(0,0,0,0.35)";
+        // disable the red "nie" button
         nieBtn.style.pointerEvents = "none";
         nieBtn.style.opacity = "0.45";
-        takBtn.style.pointerEvents = "none"; // ensure only big TAK is clickable
-        // show GIF in background so user sees preview (GIF also shown on celebration)
+        // ensure takBtn is clickable (it already is)
+        // show GIF as preview (GIF also shown again on celebration)
         const gif = document.getElementById("catsGif");
         gif.classList.add("show");
         gif.style.width = Math.min(window.innerWidth * 0.85, 900) + "px";
       }
     });
 
-    // kliknięcie TAK -> jeśli nikt nie klikał "nie" -> natychmiast celebracja
+    // clicking TAK immediate -> immediate celebration (and show original GIF)
     takBtn.addEventListener("click", ()=>{
       if(nieClicks < STEPS){
         triggerCelebration(true);
         return;
       }
-      // jeśli już był final state: kliknięcie tekstu TAK powinno celebrację
+      // if already resized to final, also celebrate
+      triggerCelebration(false);
     });
 
-    // kliknięcie samego powiększonego napisu TAK (po 8 klikach)
-    takText.addEventListener("click", ()=>{
-      if(nieClicks >= STEPS){
-        triggerCelebration(false);
-      }
-    });
-
-    bigHeart.addEventListener("click", ()=>{
-      bigHeart.animate([{transform:'scale(1)'},{transform:'scale(0.97)'},{transform:'scale(1)'}], {duration:260});
-    });
-
-    // adapt target size on resize (jeśli zmieni się rozmiar okna)
+    // adapt sizes on resize during growth or after final
     window.addEventListener("resize", ()=>{
       if(nieClicks > 0 && nieClicks < STEPS){
-        const tf = targetFont();
-        const newFont = initialFont + (tf - initialFont) * Math.min(nieClicks / STEPS, 1);
-        takText.style.fontSize = newFont + "px";
+        const fs = finalSize();
+        const newSize = Math.round(initialSize + (fs - initialSize) * Math.min(nieClicks / STEPS, 1));
+        takBtn.style.width = newSize + "px";
+        takBtn.style.height = newSize + "px";
+        takBtn.style.fontSize = Math.floor(newSize * 0.18) + "px";
       } else if(nieClicks >= STEPS){
-        const finalFont = targetFont();
-        takText.style.fontSize = finalFont + "px";
+        const fs = finalSize();
+        takBtn.style.width = fs + "px";
+        takBtn.style.height = fs + "px";
+        takBtn.style.fontSize = Math.floor(fs * 0.12) + "px";
         document.getElementById("catsGif").style.width = Math.min(window.innerWidth * 0.85, 900) + "px";
       }
     });
@@ -388,7 +362,6 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(()=> s.remove(), 1400 + Math.random()*900);
     }
 
-    // rain of hearts on overlay
     for(let j=0;j<28;j++){
       const h = document.createElement("div");
       h.className = "falling";
@@ -401,7 +374,6 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(()=> h.remove(), 3000);
     }
 
-    // flash
     const flash = document.createElement("div");
     flash.style.position = "fixed";
     flash.style.inset = 0;
@@ -411,11 +383,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(flash);
     setTimeout(()=> flash.remove(), 420);
 
-    // show centered GIF (big)
+    // pokaż GIF (PRZYWRÓCONY)
     gif.classList.add("show");
     gif.style.width = Math.min(window.innerWidth * 0.85, 900) + "px";
 
-    // click outside to close
     overlay.addEventListener("click",(e)=>{
       if(e.target === overlay){
         overlay.classList.remove("show");
@@ -444,10 +415,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   observer.observe(page3, { attributes: true });
 
-});
+}); // DOMContentLoaded
 </script>
 
 </body>
 </html>
+
 
 
