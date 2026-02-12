@@ -6,54 +6,54 @@
 <title>Walentynki 💖</title>
 <style>
   :root{
-    --bg1: linear-gradient(135deg,#ff758c,#ff7eb3);
+    --bg: linear-gradient(135deg,#ff758c,#ff7eb3);
   }
   *{box-sizing:border-box}
-  body{margin:0;height:100vh;overflow:hidden;background:var(--bg1);font-family:"Comic Sans MS",cursive,Arial}
+  body{margin:0;height:100vh;overflow:hidden;background:var(--bg);font-family:"Comic Sans MS",cursive,Arial}
   .page{position:absolute;inset:0;display:none}
   .page.active{display:block}
-  /* central boxes */
   .center-wrap{position:relative;z-index:20;height:100%;display:flex;align-items:center;justify-content:center}
-  .heart-center{
-    width:150px;height:150px;border-radius:50%;background:#e33;color:#fff;display:flex;
-    align-items:center;justify-content:center;flex-direction:column;font-weight:700;
-    box-shadow:0 10px 30px rgba(0,0,0,0.25);cursor:pointer;transition:all .45s ease;
+  /* większe serduszko w środku - wygląd "jak wcześniej" */
+  .heart-large{
+    width:220px;height:220px;border-radius:50%;background:#e33;color:#fff;display:flex;
+    align-items:center;justify-content:center;flex-direction:column;font-weight:900;
+    box-shadow:0 12px 40px rgba(0,0,0,0.28);cursor:pointer;transition:transform .25s ease,all .4s;
     transform:translateZ(0);
+    font-size:44px;
   }
-  .heart-center.small{width:120px;height:120px;font-size:14px}
-  .heart-text{font-size:20px;line-height:1}
-  .subtext{font-size:13px;margin-top:6px;color:#fff;opacity:.95}
-  .btn-inline{margin-top:10px;padding:8px 12px;border-radius:10px;border:none;cursor:pointer}
+  .heart-medium{
+    width:150px;height:150px;border-radius:50%;background:#e33;color:#fff;display:flex;
+    align-items:center;justify-content:center;flex-direction:column;font-weight:800;
+    box-shadow:0 10px 30px rgba(0,0,0,0.24);cursor:pointer;transition:all .35s;
+    font-size:30px;
+  }
+  .heart-text{line-height:1;margin:0;padding:0}
+  .subtext{font-size:14px;margin-top:8px;color:#fff;opacity:.95}
+  .controls{display:flex;gap:12px;justify-content:center;align-items:center;margin-top:8px}
+  .btn{padding:10px 16px;border-radius:12px;border:none;cursor:pointer;font-weight:800}
   .btn-green{background:#2fbf4f;color:#fff}
   .btn-red{background:#e63946;color:#fff}
-  /* falling elements (over pages) */
+  /* falling elements */
   .fall-layer{position:absolute;inset:0;pointer-events:none;z-index:5;overflow:hidden}
-  .fall{
-    position:absolute;top:-80px;pointer-events:none;user-select:none;
-    animation:fall linear forwards;opacity:0.95;will-change:transform,opacity;
-    text-shadow:0 2px 6px rgba(0,0,0,0.2)
-  }
+  .fall{position:absolute;top:-90px;pointer-events:none;user-select:none;animation:fall linear forwards;opacity:0.95;text-shadow:0 2px 6px rgba(0,0,0,0.2)}
   @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
-  /* flowers (paint-like) */
+  /* paint-like flowers */
   .flower{position:absolute;z-index:6;pointer-events:none;opacity:.95}
-  .flower.seed{font-size:22px}
-  /* small helper for messages inside heart */
-  .msg-in-heart{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#fff;text-align:center;font-weight:700}
-  /* final full-screen TAK */
-  .full-tak{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;
-    background:rgba(255,20,80,0.95);z-index:9999;color:#fff;font-weight:900;font-size:8vw}
-  /* fireworks container and cat gif */
-  .effects{position:fixed;inset:0;pointer-events:none;z-index:900;display:flex;justify-content:center;align-items:center}
-  .cat-gif{position:fixed;right:12px;bottom:12px;width:220px;height:auto;z-index:10000;pointer-events:none}
+  /* full-screen TAK when reached */
+  .full-tak{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:rgba(255,20,80,0.98);z-index:9999;color:#fff;font-weight:900}
+  /* cat gif */
+  .cat-gif{position:fixed;right:12px;bottom:12px;width:240px;height:auto;z-index:10001;pointer-events:none}
+  /* small messages that appear on "nie" clicks */
+  .mini-msg{position:fixed;padding:6px 10px;border-radius:10px;background:rgba(0,0,0,0.2);color:#fff;font-weight:700;z-index:50;pointer-events:none}
 </style>
 </head>
 <body>
 
-<!-- PAGES -->
+<!-- PAGE 1 -->
 <div id="p1" class="page active">
   <div class="fall-layer" id="fall1"></div>
   <div class="center-wrap">
-    <div id="heart1" class="heart-center" title="Kliknij">
+    <div id="heart1" class="heart-large" title="Kliknij">
       <div class="heart-text">❤️</div>
       <div class="subtext">Przygotowałem coś dla Ciebie</div>
     </div>
@@ -61,295 +61,308 @@
   <div id="flowers1"></div>
 </div>
 
+<!-- PAGE 2 -->
 <div id="p2" class="page">
   <div class="fall-layer" id="fall2"></div>
   <div class="center-wrap">
-    <div id="magicHeart" class="heart-center small" style="position:relative;">
+    <!-- zamiast małego kółka, używamy średniego serducha z tekstem w środku -->
+    <div id="magicHeart" class="heart-medium" style="position:relative;">
       <div id="mhText" class="heart-text">Jeszcze nie tu...</div>
-      <div id="mhSub" class="subtext" style="font-size:12px">Teraz tutaj</div>
+      <div id="mhSub" class="subtext" style="font-size:12px;margin-top:6px">Teraz tutaj</div>
     </div>
   </div>
   <div id="flowers2"></div>
 </div>
 
+<!-- PAGE 3 -->
 <div id="p3" class="page">
   <div class="fall-layer" id="fall3"></div>
   <div class="center-wrap">
     <div style="text-align:center;z-index:20">
-      <div id="finalQ" style="color:#fff;font-size:28px;font-weight:800;margin-bottom:12px">Czy zostaniesz moją walentynką?</div>
-      <div style="display:flex;gap:12px;justify-content:center">
-        <button id="yesBtn" class="btn-inline btn-green" style="font-size:18px;padding:12px 18px">TAKK!!!</button>
-        <button id="noBtn" class="btn-inline btn-red" style="font-size:18px;padding:12px 18px">nie</button>
+      <div id="finalQ" style="color:#fff;font-size:30px;font-weight:900;margin-bottom:14px">Czy zostaniesz moją walentynką?</div>
+      <div class="controls">
+        <button id="yesBtn" class="btn btn-green" style="font-size:20px;padding:12px 20px">TAKK!!!</button>
+        <button id="noBtn"  class="btn btn-red" style="font-size:20px;padding:12px 20px">nie</button>
       </div>
     </div>
   </div>
   <div id="flowers3"></div>
 </div>
 
-<!-- effects -->
-<div id="effects" class="effects" aria-hidden="true"></div>
+<!-- effects / final -->
+<div id="effects" style="position:fixed;inset:0;pointer-events:none;z-index:800"></div>
 <img id="catGif" class="cat-gif" src="" alt="" style="display:none"/>
 
 <script>
-/* ---------- helper functions ---------- */
+/* ---------- utilities ---------- */
 function rand(min,max){return min + Math.random()*(max-min)}
-function createFalling(container, emoji, count, sizeRange=[16,36], durationRange=[3.5,6]) {
+function createFalling(container, emoji, count, sizeRange=[16,36], durRange=[3.5,6]) {
   for(let i=0;i<count;i++){
     const el = document.createElement('div');
     el.className = 'fall';
     el.textContent = emoji;
-    el.style.left = (Math.random()*95)+'vw';
+    el.style.left = (Math.random()*94)+'vw';
     const fs = Math.round(rand(sizeRange[0], sizeRange[1]));
     el.style.fontSize = fs + 'px';
-    el.style.animationDuration = rand(durationRange[0], durationRange[1]) + 's';
+    el.style.animationDuration = rand(durRange[0], durRange[1]) + 's';
     el.style.opacity = (0.7 + Math.random()*0.3);
     container.appendChild(el);
-    // remove after animation
-    setTimeout(()=>{ if(el && el.parentNode) el.parentNode.removeChild(el); }, (durationRange[1]+0.5)*1000);
+    // cleanup after animation
+    setTimeout(()=>{ if(el.parentNode) el.parentNode.removeChild(el); }, (durRange[1]+0.6)*1000);
   }
 }
-function createFlowers(container, emojis, count=18) {
+function createFlowers(container, emojis, count=18){
   for(let i=0;i<count;i++){
-    const e = document.createElement('div');
-    e.className = 'flower';
-    e.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    e.style.left = (Math.random()*88 + 4) + 'vw';
-    e.style.top = (Math.random()*80 + 5) + 'vh';
-    const s = Math.round(rand(18,34));
-    e.style.fontSize = s + 'px';
-    e.style.opacity = (0.75 + Math.random()*0.25);
-    // subtle floating animation via CSS transform using setInterval
-    container.appendChild(e);
+    const f = document.createElement('div');
+    f.className = 'flower';
+    f.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    f.style.left = (Math.random()*86 + 6) + 'vw';
+    f.style.top  = (Math.random()*78 + 6) + 'vh';
+    f.style.fontSize = Math.round(rand(18,36)) + 'px';
+    f.style.opacity = (0.75 + Math.random()*0.25);
+    container.appendChild(f);
   }
 }
-/* ---------- page setup ---------- */
+
+/* ---------- page refs ---------- */
 const p1 = document.getElementById('p1'), p2 = document.getElementById('p2'), p3 = document.getElementById('p3');
 const fall1 = document.getElementById('fall1'), fall2 = document.getElementById('fall2'), fall3 = document.getElementById('fall3');
 const flowers1 = document.getElementById('flowers1'), flowers2 = document.getElementById('flowers2'), flowers3 = document.getElementById('flowers3');
-const effects = document.getElementById('effects');
-const catGif = document.getElementById('catGif');
-let currentPage = 1;
+const effects = document.getElementById('effects'), catGif = document.getElementById('catGif');
 
-/* populate falling & flowers for each page */
+/* ---------- populate flowers (different sets) ---------- */
 createFlowers(flowers1, ['🌸','🌺','🌷','🌼'], 20);
 createFlowers(flowers2, ['🌻','🌹','🌼','🌺'], 20);
 createFlowers(flowers3, ['🌸','🌷','🌹','🌺','🌼'], 22);
 
-/* spawn a steady stream by repeating small batches */
+/* ---------- steady falling stream (keeps pages lively) ---------- */
 function startStream(){
-  // page1 heavy hearts
-  createFalling(fall1,'❤️',12,[18,40],[3.5,6]);
-  createFalling(fall1,'🌸',6,[14,26],[4,6]);
-  // page2 balanced
-  createFalling(fall2,'❤️',8,[16,36],[3.5,6]);
-  createFalling(fall2,'✨',6,[14,26],[3.5,5.5]);
-  // page3
-  createFalling(fall3,'❤️',10,[18,38],[3.5,5.5]);
-  createFalling(fall3,'✨',8,[14,28],[3.5,5.5]);
+  createFalling(fall1,'❤️',12,[18,44],[3.5,5.8]);
+  createFalling(fall1,'🌸',6,[14,26],[4.2,6]);
+  createFalling(fall2,'❤️',8,[16,36],[3.6,5.8]);
+  createFalling(fall2,'✨',6,[14,26],[3.4,5.4]);
+  createFalling(fall3,'❤️',10,[18,38],[3.2,5.4]);
+  createFalling(fall3,'✨',8,[14,28],[3.2,5.2]);
 }
-/* run stream periodically */
 startStream();
 const streamTimer = setInterval(startStream, 1400);
 
-/* page switching helper */
-function showPage(n){
-  p1.classList.remove('active'); p2.classList.remove('active'); p3.classList.remove('active');
-  if(n===1) p1.classList.add('active');
-  if(n===2) p2.classList.add('active');
-  if(n===3) p3.classList.add('active');
-  currentPage = n;
-}
+/* ---------- page switch helper ---------- */
+function showPage(n){ p1.classList.remove('active'); p2.classList.remove('active'); p3.classList.remove('active'); if(n==1) p1.classList.add('active'); if(n==2) p2.classList.add('active'); if(n==3) p3.classList.add('active'); }
 
-/* ---------- PAGE 1: heart click -> page2 ---------- */
+/* ---------- PAGE 1: big heart -> go to page2 ---------- */
 const heart1 = document.getElementById('heart1');
-heart1.addEventListener('click', ()=> {
-  // small pulse
-  heart1.style.transform = 'scale(0.96)';
-  setTimeout(()=>heart1.style.transform = '', 220);
-  // go to page2 and set it up
+heart1.addEventListener('click', ()=>{
+  heart1.style.transform = 'scale(0.98)';
+  setTimeout(()=>heart1.style.transform='',220);
   showPage(2);
-  // ensure page2 magic setup is initialized (safe if run many times)
   initPage2();
 });
 
-/* ---------- PAGE 2: magic heart behavior ---------- */
-let page2Initialized = false;
+/* ---------- PAGE 2: magic heart behavior (stable) ---------- */
+let page2Inited = false;
 function initPage2(){
-  if(page2Initialized) return;
-  page2Initialized = true;
-  const magicHeart = document.getElementById('magicHeart');
+  if(page2Inited) return;
+  page2Inited = true;
+  const magic = document.getElementById('magicHeart');
   const mhText = document.getElementById('mhText');
-  const mhSub = document.getElementById('mhSub');
-  // initial styles for magicHeart to allow absolute movement
-  magicHeart.style.position = 'absolute';
-  magicHeart.style.transition = 'all 0.55s cubic-bezier(.2,.9,.2,1)';
-  // step logic
+  const mhSub  = document.getElementById('mhSub');
+
+  // allow absolute positioning for moves
+  magic.style.position = 'absolute';
+  magic.style.transition = 'all 0.55s cubic-bezier(.2,.9,.2,1)';
+
   let step = 0;
   const poems = [
     "Lena, Lenka, Lencia — serduszko puka cicho",
     "Lencia mój promyk dnia — śmiej się tu ze mną",
     "Lenka — jak w piosence, wszystko dla Ciebie"
   ];
-  magicHeart.addEventListener('click', ()=>{
+
+  magic.addEventListener('click', ()=>{
     step++;
-    if(step===1){
-      // change header text to a poem and hide subtext
+    if(step === 1){
+      // show poem, hide sub and move top-right
       mhText.textContent = poems[Math.floor(Math.random()*poems.length)];
       mhSub.style.display = 'none';
-      // move to top-right
-      magicHeart.style.top = '6%';
-      magicHeart.style.right = '6%';
-      magicHeart.style.left = '';
-      magicHeart.style.bottom = '';
-    } else if(step===2){
-      // move to bottom-left and change subtext
-      magicHeart.style.top = '';
-      magicHeart.style.right = '';
-      magicHeart.style.left = '6%';
-      magicHeart.style.bottom = '6%';
-      mhText.textContent = mhText.textContent; // keep poem
+      magic.style.top = '6%';
+      magic.style.right = '6%';
+      magic.style.left = '';
+      magic.style.bottom = '';
+    } else if(step === 2){
+      // bottom-left, show small subtext
+      magic.style.top = '';
+      magic.style.right = '';
+      magic.style.left = '6%';
+      magic.style.bottom = '6%';
       mhSub.style.display = 'block';
       mhSub.textContent = 'Oho i co teraz?';
-    } else if(step===3){
-      // back to center, prepare last button text inside small subtext
-      magicHeart.style.position = '';
-      magicHeart.style.top = '';
-      magicHeart.style.left = '';
-      magicHeart.style.right = '';
-      magicHeart.style.bottom = '';
+    } else if(step === 3){
+      // back to center, prepare last text
+      magic.style.position = '';
+      magic.style.top = '';
+      magic.style.left = '';
+      magic.style.right = '';
+      magic.style.bottom = '';
       mhSub.style.display = 'block';
       mhSub.textContent = 'no dobra ale ostatnia rzecz';
     } else {
-      // proceed to page 3
+      // go to page 3
       showPage(3);
       initPage3();
     }
   });
 }
 
-/* ---------- PAGE 3: final interactions ---------- */
-let page3Initialized=false;
+/* ---------- PAGE 3: yes/no logic with growth and final ---------- */
+let page3Inited = false;
 function initPage3(){
-  if(page3Initialized) return;
-  page3Initialized=true;
+  if(page3Inited) return;
+  page3Inited = true;
+
   const yesBtn = document.getElementById('yesBtn');
-  const noBtn = document.getElementById('noBtn');
-  const finalQ = document.getElementById('finalQ');
+  const noBtn  = document.getElementById('noBtn');
 
   let noClicks = 0;
   const messages = ["ale jak to","aha?","😻","no wezzz"];
-  // place a message inside a floating small bubble near center (simulate inside heart)
-  function showMessage(msg){
+
+  function showMini(msg){
     const d = document.createElement('div');
+    d.className = 'mini-msg';
     d.textContent = msg;
-    d.style.position='absolute';
-    d.style.left = (50 + rand(-18,18)) + '%';
-    d.style.top = (50 + rand(-18,18)) + '%';
-    d.style.transform='translate(-50%,-50%)';
-    d.style.color='white';
-    d.style.background='rgba(0,0,0,0.18)';
-    d.style.padding='6px 10px';
-    d.style.borderRadius='12px';
-    d.style.zIndex=30;
-    d.style.fontWeight='700';
-    d.style.opacity='0';
+    d.style.left = (50 + rand(-20,20)) + '%';
+    d.style.top  = (50 + rand(-20,20)) + '%';
+    d.style.transform = 'translate(-50%,-50%)';
+    d.style.opacity = '0';
     document.body.appendChild(d);
-    // fade in/out
-    setTimeout(()=>d.style.transition='all .25s ease',10);
-    setTimeout(()=>d.style.opacity='1',40);
-    setTimeout(()=>d.style.opacity='0',2200);
-    setTimeout(()=>{ if(d.parentNode) d.parentNode.removeChild(d); },2600);
+    setTimeout(()=>{ d.style.transition = 'all .18s ease'; d.style.opacity='1'; }, 10);
+    setTimeout(()=>{ d.style.opacity='0'; }, 1800);
+    setTimeout(()=>{ if(d.parentNode) d.parentNode.removeChild(d); }, 2400);
   }
 
-  noBtn.addEventListener('click', ()=>{
-    noClicks++;
-    // enlarge yesBtn text gradually
-    const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
-    yesBtn.style.fontSize = (currentSize + 5) + 'px';
-    // show message inside page (cycle messages)
-    const msgIndex = Math.min(messages.length-1, noClicks-1);
-    showMessage(messages[msgIndex] || messages[messages.length-1]);
-    // after 8 clicks -> full-screen TAK
-    if(noClicks >= 8){
-      triggerFinalExplosion();
-    }
+  // clicking YES immediately triggers final
+  yesBtn.addEventListener('click', ()=> {
+    triggerFinalExplosion();
   });
 
-  yesBtn.addEventListener('click', ()=>{
-    // gentle enlarge on manual yes clicks too
-    const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
-    yesBtn.style.fontSize = (currentSize + 4) + 'px';
+  // clicking NO increments counter and grows YES button. after 8 clicks => full-screen TAK available
+  noBtn.addEventListener('click', ()=>{
+    noClicks++;
+    // gently increase yes button size each time
+    const curFS = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+    yesBtn.style.fontSize = (curFS + 4) + 'px';
+    // show message sequence
+    const msg = messages[Math.min(messages.length-1, noClicks-1)];
+    showMini(msg);
+    // when reach 8 clicks -> make TAK occupy full screen (replace p3 content)
+    if(noClicks >= 8){
+      makeFullTak();
+    }
   });
 }
 
+/* ---------- replace p3 with full-screen TAK (clickable) ---------- */
+function makeFullTak(){
+  // remove falling and flowers in p3 (optional)
+  clearChildren(fall3);
+  clearChildren(flowers3);
+  // clear page content
+  p3.innerHTML = '';
+  // big full TAK
+  const full = document.createElement('div');
+  full.className = 'full-tak';
+  full.style.fontSize = '12vw';
+  full.textContent = 'TAK!!!';
+  document.body.appendChild(full);
+  // clicking it triggers final explosion (and remove other elements)
+  full.addEventListener('click', ()=> {
+    triggerFinalExplosion();
+  }, { once: true });
+}
+
+/* helper remove children */
+function clearChildren(el){ while(el && el.firstChild) el.removeChild(el.firstChild); }
+
 /* ---------- final explosion & cats GIF ---------- */
 function triggerFinalExplosion(){
-  // lock page3 and show full TAK
-  const page3Inner = document.getElementById('p3');
-  // clear content of p3 to show only TAK
-  page3Inner.innerHTML = '';
+  // prevent multiple triggers
+  if(window._finalTriggered) return;
+  window._finalTriggered = true;
+
+  // remove page content
+  p1.style.display = 'none'; p2.style.display = 'none'; p3.style.display = 'none';
+  // big TAK center (full)
   const big = document.createElement('div');
   big.className = 'full-tak';
   big.textContent = 'TAK!!!';
   document.body.appendChild(big);
 
-  // create bursts of hearts & stars
-  for(let i=0;i<90;i++){
+  // spawn many hearts & stars outward
+  for(let i=0;i<120;i++){
     const e = document.createElement('div');
     e.className = 'fall';
-    e.textContent = (Math.random()>0.4)? '❤️' : '✨';
-    const size = Math.round(rand(20,60));
+    e.textContent = (Math.random()>0.45)? '❤️' : '✨';
+    const size = Math.round(rand(20,72));
     e.style.fontSize = size + 'px';
-    e.style.left = (50 + rand(-35,35)) + 'vw';
-    e.style.top = (50 + rand(-35,35)) + 'vh';
-    const dur = rand(1.2,2.8);
+    // spawn around center region
+    e.style.left = (50 + rand(-30,30)) + 'vw';
+    e.style.top  = (50 + rand(-30,30)) + 'vh';
+    const dur = rand(1.0,2.2);
     e.style.animationDuration = dur + 's';
     e.style.opacity = 1;
-    // make them pop outward by using transform on insertion
-    e.style.transform = `translate(${rand(-200,200)}px,${rand(-200,200)}px)`;
-    e.style.transition = `transform ${dur}s cubic-bezier(.2,.9,.2,1),opacity ${dur}s`;
     document.body.appendChild(e);
-    setTimeout(()=>{ e.style.opacity = 0; if(e.parentNode) e.parentNode.removeChild(e); }, dur*1000 + 400);
+    setTimeout(()=>{ if(e.parentNode) e.parentNode.removeChild(e); }, dur*1000 + 600);
   }
 
-  // show cat gif (two happy cats) — embedded remote gif
-  catGif.src = "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif"; // happy cats
-  catGif.style.display = 'block';
-  catGif.style.opacity = '0';
-  catGif.style.transition = 'opacity .6s ease';
-  setTimeout(()=>catGif.style.opacity='1',120);
-
-  // also small fireworks circles
-  for(let i=0;i<12;i++){
+  // small colorful bursts
+  for(let i=0;i<18;i++){
     const c = document.createElement('div');
     c.style.position='fixed';
     c.style.left = (50 + rand(-40,40)) + 'vw';
     c.style.top  = (50 + rand(-40,40)) + 'vh';
-    c.style.width = c.style.height = Math.round(rand(8,24)) + 'px';
-    c.style.background = (Math.random()>0.5) ? 'rgba(255,30,100,0.95)' : 'rgba(255,215,60,0.95)';
+    const s = Math.round(rand(12,36));
+    c.style.width = c.style.height = s + 'px';
+    c.style.background = (Math.random()>0.5) ? 'rgba(255,70,120,0.95)' : 'rgba(255,215,60,0.95)';
     c.style.borderRadius='50%';
-    c.style.zIndex = 1100;
-    c.style.opacity = 1;
+    c.style.zIndex=1200;
+    c.style.opacity=1;
     document.body.appendChild(c);
     const dur = rand(700,1400);
     setTimeout(()=>{ c.style.transition = `transform ${dur}ms ease,opacity ${dur}ms`; c.style.transform = `translateY(${rand(-120,120)}px) scale(2)`; c.style.opacity=0; }, 40);
     setTimeout(()=>{ if(c.parentNode) c.parentNode.removeChild(c); }, dur+400);
   }
 
-  // Make the big TAK clickable to restart (optional)
+  // show cat gif
+  catGif.src = "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif";
+  catGif.style.display = 'block';
+  catGif.style.opacity = '0';
+  catGif.style.transition = 'opacity .6s ease';
+  setTimeout(()=>catGif.style.opacity='1',120);
+
+  // clicking big restarts
   big.addEventListener('click', ()=> location.reload());
 }
 
-/* ---------- start by showing page1 (already active) ---------- */
-showPage(1);
+/* ---------- init page3 when user reaches it ---------- */
+function initPage3(){
+  initPage2(); // ensure page2 elements exist (harmless)
+  initPage3Once();
+}
 
-/* safe initialization helpers in case user navigates back and forth */
-function initPage2Safe(){ initPage2(); }
-function initPage3Safe(){ initPage3(); }
+/* ensure initPage3 only runs once */
+let initPage3OnceCalled = false;
+function initPage3Once(){
+  if(initPage3OnceCalled) return;
+  initPage3OnceCalled = true;
+  // start page3 logic
+  // if user arrived directly (e.g. by previous steps), ensure init
+  initPage3();
+}
 
-/* Expose for debugging (not necessary) */
-window._debug = { showPage, initPage2Safe, initPage3Safe };
+/* expose for debugging */
+window._debug = { showPage, triggerFinalExplosion };
 
+/* ensure p1->p2 on load works if user clicks heart1 */
 </script>
 </body>
 </html>
