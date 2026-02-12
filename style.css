@@ -1,0 +1,19 @@
+/* Zmieniamy tło i wygląd głównego bloku */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(120deg, #2980b9, #6dd5fa);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: rgba(255,255,255,0.1);
+    padding: 50px;
+    border-radius: 20px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
