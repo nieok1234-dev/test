@@ -6,6 +6,29 @@ body {
     background: linear-gradient(135deg, #ff758c, #ff7eb3);
 }
 
+/* RAMKA */
+.frame {
+    position: fixed;
+    inset: 15px;
+    border: 8px solid rgba(255,255,255,0.3);
+    border-radius: 25px;
+    pointer-events: none;
+}
+
+/* FILARY */
+.pillar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 70px;
+    background: linear-gradient(#ffb7c5, #ff6f91);
+    opacity: 0.4;
+}
+
+.pillar.left { left: 0; }
+.pillar.right { right: 0; }
+
+/* EKRANY */
 .screen {
     position: fixed;
     inset: 0;
@@ -22,16 +45,15 @@ body {
     pointer-events: auto;
 }
 
+/* BLOK */
 .container {
     text-align: center;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.25);
     padding: 50px;
     border-radius: 30px;
     color: white;
-    box-shadow: 0 0 25px rgba(0,0,0,0.3);
-    animation: fadeIn 1.5s ease;
+    box-shadow: 0 0 30px rgba(0,0,0,0.4);
     z-index: 10;
-    max-width: 320px;
 }
 
 button {
@@ -48,49 +70,22 @@ button {
 
 button:hover {
     transform: scale(1.1);
-    background: #ff1744;
 }
 
-/* SERDUSZKA */
-
-.heart {
+/* SERDUSZKA + GWIAZDKI */
+.heart, .star {
     position: fixed;
     top: -50px;
-    font-size: 26px;
     animation: fall linear forwards;
-    color: rgba(255,255,255,0.9);
+    pointer-events: none;
 }
+
+.heart { font-size: 26px; }
+.star { font-size: 22px; }
 
 @keyframes fall {
     to {
         transform: translateY(110vh);
         opacity: 0;
     }
-}
-
-/* KOTKI I KWIATKI */
-
-.decorations {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-}
-
-.floating {
-    position: absolute;
-    width: 120px;
-    animation: float 6s ease-in-out infinite alternate;
-}
-
-.cat { top: 5%; left: 5%; }
-.flower { bottom: 5%; right: 5%; }
-
-@keyframes float {
-    from { transform: translateY(0); }
-    to { transform: translateY(30px); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
 }
