@@ -6,30 +6,6 @@ body {
     background: linear-gradient(135deg, #ff758c, #ff7eb3);
 }
 
-/* RAMKA WIŚNIA */
-.sakura-frame {
-    position: fixed;
-    inset: 10px;
-    border-radius: 25px;
-    border: 8px solid transparent;
-    background:
-        repeating-linear-gradient(45deg, #ffb7c5 0 10px, #ffd6e7 10px 20px);
-    mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-    -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-    padding: 10px;
-    pointer-events: none;
-    animation: glow 4s ease-in-out infinite alternate;
-}
-
-@keyframes glow {
-    from { box-shadow: 0 0 20px #ffd6e7; }
-    to { box-shadow: 0 0 45px #ffb7c5; }
-}
-
 /* EKRANY */
 .screen {
     position: fixed;
