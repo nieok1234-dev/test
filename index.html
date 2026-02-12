@@ -39,6 +39,7 @@
     background:#2ecc71;color:#fff;border-radius:12px;padding:10px;
     display:flex;align-items:center;justify-content:center;font-weight:900;
     font-size:16px;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.18);
+    transition: width 220ms ease, height 220ms ease, font-size 220ms ease, transform 220ms ease;
   }
   .choice-nie{background:#ff3b30;color:#fff;padding:8px 12px;border-radius:8px;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,0.12)}
 
@@ -52,6 +53,7 @@
   .spark{position:absolute;width:12px;height:12px;border-radius:50%;pointer-events:none;opacity:0.95;transform:translate(-50%,-50%);animation:fly 1000ms ease-out forwards}
   @keyframes fly{to{transform:translate(var(--tx),var(--ty)) scale(0.4);opacity:0}}
 
+  /* GIF (Twój GIF, powiększony) */
   .cats-gif{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:920px;height:auto;z-index:920;border-radius:14px;box-shadow:0 25px 70px rgba(0,0,0,0.45);overflow:hidden;background:white;display:none}
   .cats-gif.show{display:block}
 
@@ -211,20 +213,22 @@ document.addEventListener("DOMContentLoaded", () => {
     let msgIndex = 0;
 
     const REMOVE_AFTER = 7; // remove 'nie' after 7 clicks
+    const FULL_AFTER = 8;   // full-screen after 8 clicks (growth target)
+    const initialSize = 110;
 
-    // simple behavior: only remove 'nie' after 7 clicks; don't change TAK otherwise
-    takBtn.style.width = "110px";
-    takBtn.style.height = "110px";
+    takBtn.style.width = initialSize + "px";
+    takBtn.style.height = initialSize + "px";
     takBtn.style.borderRadius = "12px";
-    takBtn.style.fontSize = "18px";
+    takBtn.style.fontSize = Math.floor(initialSize * 0.18) + "px";
     takBtn.style.display = "flex";
     takBtn.style.alignItems = "center";
     takBtn.style.justifyContent = "center";
+    takBtn.style.cursor = "pointer";
 
     nieBtn.addEventListener("click", ()=>{
       nieClicks++;
 
-      // add small messages inside heart (same as before)
+      // messages in heart
       const m = messages[msgIndex] || messages[messages.length-1];
       const span = document.createElement("div");
       span.textContent = m;
@@ -233,18 +237,70 @@ document.addEventListener("DOMContentLoaded", () => {
       heartLines.appendChild(span);
       msgIndex = Math.min(msgIndex + 1, messages.length-1);
 
-      // if reached threshold -> simply remove 'nie' button from DOM
+      // grow toward fullscreen based on FULL_AFTER steps (linear)
+      const fw = window.innerWidth;
+      const fh = window.innerHeight;
+      const ratio = Math.min(nieClicks / FULL_AFTER, 1);
+      const newW = Math.round(initialSize + (fw - initialSize) * ratio);
+      const newH = Math.round(initialSize + (fh - initialSize) * ratio);
+
+      takBtn.style.width = newW + "px";
+      takBtn.style.height = newH + "px";
+      takBtn.style.fontSize = Math.floor(Math.min(newW,newH) * 0.12) + "px";
+      takBtn.style.transition = "width 220ms ease, height 220ms ease, font-size 220ms ease";
+
+      // small feedback for NIE
+      nieBtn.animate([{transform:'translateY(0)'},{transform:'translateY(-8px)'},{transform:'translateY(0)'}], {duration:220, easing:'ease-out'});
+
+      // remove 'nie' after REMOVE_AFTER clicks but DO NOT stop growth
       if(nieClicks >= REMOVE_AFTER){
         if(nieBtn && nieBtn.parentNode){
           nieBtn.parentNode.removeChild(nieBtn);
-          nieBtn = null; // clear reference
+          nieBtn = null;
         }
+      }
+
+      // if reached FULL_AFTER -> make TAK fullscreen (still clickable)
+      if(nieClicks >= FULL_AFTER){
+        takBtn.style.position = "fixed";
+        takBtn.style.left = "0";
+        takBtn.style.top = "0";
+        takBtn.style.transform = "none";
+        takBtn.style.width = "100vw";
+        takBtn.style.height = "100vh";
+        takBtn.style.borderRadius = "0";
+        takBtn.style.fontSize = Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.15) + "px";
+        takBtn.style.zIndex = "2147483646";
+        takBtn.style.boxShadow = "none";
+        takBtn.dataset.full = "1";
+
+        // show GIF preview behind
+        const gif = document.getElementById("catsGif");
+        gif.classList.add("show");
+        gif.style.width = Math.min(window.innerWidth * 0.9, 1200) + "px";
       }
     });
 
     // clicking TAK always triggers celebration
     takBtn.addEventListener("click", ()=>{
       triggerCelebration();
+    });
+
+    // handle resize to keep visual correctness
+    window.addEventListener("resize", ()=>{
+      if(takBtn.dataset.full === "1"){
+        takBtn.style.width = "100vw";
+        takBtn.style.height = "100vh";
+        takBtn.style.fontSize = Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.15) + "px";
+        document.getElementById("catsGif").style.width = Math.min(window.innerWidth * 0.9, 1200) + "px";
+      } else {
+        const ratio = Math.min(nieClicks / FULL_AFTER, 1);
+        const newW = Math.round(initialSize + (window.innerWidth - initialSize) * ratio);
+        const newH = Math.round(initialSize + (window.innerHeight - initialSize) * ratio);
+        takBtn.style.width = newW + "px";
+        takBtn.style.height = newH + "px";
+        takBtn.style.fontSize = Math.floor(Math.min(newW,newH) * 0.12) + "px";
+      }
     });
 
   } // initPage3 end
@@ -259,7 +315,7 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.classList.add("show");
 
     const colors = ["#ff2d55","#ff9aa2","#ffd166","#ff6b6b","#ff3b30","#ffd6e8"];
-    const num = 70;
+    const num = 90;
     const cx = window.innerWidth/2;
     const cy = window.innerHeight/2;
     for(let i=0;i<num;i++){
@@ -267,21 +323,21 @@ document.addEventListener("DOMContentLoaded", () => {
       s.className = "spark";
       if(Math.random() < 0.55){
         s.style.background = colors[Math.floor(Math.random()*colors.length)];
-        const size = 8 + Math.random()*18;
+        const size = 8 + Math.random()*26;
         s.style.width = s.style.height = size + "px";
         s.style.borderRadius = "50%";
       } else {
         s.textContent = "❤️";
-        s.style.fontSize = (10 + Math.random()*22) + "px";
+        s.style.fontSize = (10 + Math.random()*28) + "px";
         s.style.width = s.style.height = "auto";
         s.style.lineHeight = "1";
         s.style.padding = "2px";
         s.style.background = "transparent";
       }
-      s.style.left = (cx + (Math.random()*40-20)) + "px";
-      s.style.top = (cy + (Math.random()*40-20)) + "px";
+      s.style.left = (cx + (Math.random()*80-40)) + "px";
+      s.style.top = (cy + (Math.random()*80-40)) + "px";
       const angle = Math.random()*Math.PI*2;
-      const radius = 120 + Math.random()*420;
+      const radius = 120 + Math.random()*600;
       const tx = Math.cos(angle) * radius + "px";
       const ty = Math.sin(angle) * radius + "px";
       s.style.setProperty("--tx", tx);
@@ -289,10 +345,10 @@ document.addEventListener("DOMContentLoaded", () => {
       s.style.opacity = 1;
       s.style.zIndex = 920 + Math.floor(Math.random()*80);
       explosion.appendChild(s);
-      setTimeout(()=> s.remove(), 1400 + Math.random()*900);
+      setTimeout(()=> s.remove(), 1600 + Math.random()*900);
     }
 
-    for(let j=0;j<30;j++){
+    for(let j=0;j<36;j++){
       const h = document.createElement("div");
       h.className = "falling";
       h.textContent = "💖";
@@ -301,20 +357,20 @@ document.addEventListener("DOMContentLoaded", () => {
       h.style.animationDuration = 1.2 + Math.random()*2 + "s";
       h.style.top = (-20 - Math.random()*120) + "px";
       overlay.appendChild(h);
-      setTimeout(()=> h.remove(), 3000);
+      setTimeout(()=> h.remove(), 3200);
     }
 
     const flash = document.createElement("div");
     flash.style.position = "fixed";
     flash.style.inset = 0;
-    flash.style.background = "radial-gradient(circle at center, rgba(255,255,255,0.95), rgba(255,255,255,0.2) 40%, transparent 60%)";
+    flash.style.background = "radial-gradient(circle at center, rgba(255,255,255,0.98), rgba(255,255,255,0.2) 40%, transparent 60%)";
     flash.style.zIndex = 960;
     flash.style.pointerEvents = "none";
     document.body.appendChild(flash);
     setTimeout(()=> flash.remove(), 420);
 
     gif.classList.add("show");
-    gif.style.width = Math.min(window.innerWidth * 0.9, 1100) + "px";
+    gif.style.width = Math.min(window.innerWidth * 0.9, 1200) + "px";
 
     overlay.addEventListener("click",(e)=>{
       if(e.target === overlay){
