@@ -47,21 +47,52 @@
   .big-heart svg{position:absolute;left:0;top:0;width:100%;height:100%;z-index:0;filter: drop-shadow(0 12px 30px rgba(0,0,0,0.18)) }
   .big-heart .inside{position:relative;z-index:2;width:78%;text-align:center;color:white}
 
-  .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);z-index:900}
-  .overlay.show{display:flex}
-  .explosion{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:910}
-  .spark{position:absolute;width:12px;height:12px;border-radius:50%;pointer-events:none;opacity:0.95;transform:translate(-50%,-50%);animation:fly 1000ms ease-out forwards}
-  @keyframes fly{to{transform:translate(var(--tx),var(--ty)) scale(0.4);opacity:0}}
+/* corner gifs and center gif */
+.corner-gif{
+  position:fixed;
+  width:260px;
+  max-width:28vw;
+  z-index: 850;
+  display:none;
+  border-radius:12px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.28);
+}
+#gif-top-left{ left:18px; top:18px; }
+#gif-top-right{ right:18px; top:18px; }
+#gif-bottom-left{ left:18px; bottom:18px; }
+#gif-bottom-right{ right:18px; bottom:18px; }
 
-  /* GIF (Twój GIF, powiększony) */
-  .cats-gif{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:920px;height:auto;z-index:920;border-radius:14px;box-shadow:0 25px 70px rgba(0,0,0,0.45);overflow:hidden;background:white;display:none}
-  .cats-gif.show{display:block}
+.center-gif{
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:420px;
+  max-width:70vw;
+  display:none;
+  z-index:860;
+  border-radius:12px;
+  box-shadow:0 18px 50px rgba(0,0,0,0.35);
+}
 
-  @media (max-width:1000px){
-    .cats-gif{width:92vw}
-    .big-heart{width:280px;height:240px}
-    .heart-box{width:240px;height:220px}
-  }
+/* overlay & fireworks */
+.overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);z-index:900}
+.overlay.show{display:flex}
+.explosion{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:910}
+.spark{position:absolute;width:12px;height:12px;border-radius:50%;pointer-events:none;opacity:0.95;transform:translate(-50%,-50%);animation:fly 1000ms ease-out forwards}
+@keyframes fly{to{transform:translate(var(--tx),var(--ty)) scale(0.4);opacity:0}}
+
+/* GIF (celebration) */
+.cats-gif{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:920px;height:auto;z-index:920;border-radius:14px;box-shadow:0 25px 70px rgba(0,0,0,0.45);overflow:hidden;background:white;display:none}
+.cats-gif.show{display:block}
+
+@media (max-width:1000px){
+  .center-gif{width:72vw}
+  .corner-gif{max-width:35vw}
+  .cats-gif{width:92vw}
+  .big-heart{width:280px;height:240px}
+  .heart-box{width:240px;height:220px}
+}
 </style>
 </head>
 <body>
@@ -70,10 +101,25 @@
   <div id="page2" class="page"></div>
   <div id="page3" class="page"></div>
 
+  <!-- corner gifs -->
+  <img id="gif-top-left"   class="corner-gif" src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="kot top left"/>
+  <img id="gif-top-right"  class="corner-gif" src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif" alt="kot top right"/>
+  <img id="gif-bottom-left" class="corner-gif" src="https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif" alt="kot bottom left"/>
+  <img id="gif-bottom-right"class="corner-gif" src="https://media.giphy.com/media/12HZukMBlutpoQ/giphy.gif" alt="kot bottom right"/>
+
+  <!-- center gif -->
+  <img id="centerGif" class="center-gif" src="https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif" alt="kot center"/>
+
+  <!-- overlay for celebration and celebration GIF -->
   <div id="overlay" class="overlay" aria-hidden="true">
     <div id="explosion" class="explosion"></div>
     <img id="catsGif" class="cats-gif" src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" alt="kot całujący ekran"/>
   </div>
+
+  <!-- romantic music (plays on celebration click) -->
+  <audio id="romance" preload="auto">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -81,6 +127,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const page2 = document.getElementById("page2");
   const page3 = document.getElementById("page3");
   const pages = [page1,page2,page3];
+
+  const gifTL = document.getElementById("gif-top-left");
+  const gifTR = document.getElementById("gif-top-right");
+  const gifBL = document.getElementById("gif-bottom-left");
+  const gifBR = document.getElementById("gif-bottom-right");
+  const centerGif = document.getElementById("centerGif");
+  const romanceAudio = document.getElementById("romance");
 
   function showPage(n){
     pages.forEach(p=>p.classList.remove("active"));
@@ -116,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* PAGE 1 */
+  /* -------- PAGE 1 -------- */
   falling(page1,"❤️",60);
   flowers(page1,["🌸","🌺","🌷","🌼"],18);
   const box1 = document.createElement("div");
@@ -134,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
   page1.appendChild(box1);
   document.getElementById("b1").addEventListener("click", ()=> showPage(1));
 
-  /* PAGE 2 */
+  /* -------- PAGE 2 -------- */
   falling(page2,"❤️",30);
   falling(page2,"⭐",20);
   flowers(page2,["🌻","🌹","🌼","🌺"],22);
@@ -156,27 +209,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let step = 0;
   const moveBtn = document.getElementById("moveBtn");
+  const ptext = document.getElementById("ptext");
+
   heartWrap.style.left="50%"; heartWrap.style.top="50%"; heartWrap.style.transform="translate(-50%,-50%)";
+
   moveBtn.addEventListener("click", ()=>{
     step++;
+    // step 1 -> move to top-right; remove ptext; show center gif + bottom-left gif
     if(step===1){
       heartWrap.style.top="12%";
       heartWrap.style.left="80%";
-    } else if(step===2){
+      // remove the ptext content entirely
+      if(ptext) ptext.textContent = "";
+
+      // show center gif and bottom-left corner gif
+      centerGif.style.display = "block";
+      gifBL.style.display = "block";
+      gifTL.style.display = "none";
+      gifTR.style.display = "none";
+      gifBR.style.display = "none";
+    }
+    // step 2 -> move to bottom-left; show center gif + top-right gif
+    else if(step===2){
       heartWrap.style.top="78%";
       heartWrap.style.left="10%";
       moveBtn.textContent = "oho i co teraz?";
-    } else if(step===3){
+
+      centerGif.style.display = "block";
+      gifTR.style.display = "block";
+      gifBL.style.display = "none";
+      gifTL.style.display = "none";
+      gifBR.style.display = "none";
+    }
+    // step 3 -> back to center; show gifs in all 4 corners; hide centerGif
+    else if(step===3){
       heartWrap.style.top="50%";
       heartWrap.style.left="50%";
       moveBtn.textContent = "no dobra ale ostatnia rzecz";
+
+      centerGif.style.display = "none";
+      gifTL.style.display = "block";
+      gifTR.style.display = "block";
+      gifBL.style.display = "block";
+      gifBR.style.display = "block";
     } else {
-      showPage(2); // page index 2 => page3
+      // proceed to page 3 and initialize
+      showPage(2); // page index 2 -> page3
       initPage3();
     }
   });
 
-  /* PAGE 3 init */
+  /* -------- PAGE 3 (init) -------- */
   function initPage3(){
     page3.innerHTML = "";
     falling(page3,"❤️",40);
@@ -237,7 +320,7 @@ document.addEventListener("DOMContentLoaded", () => {
       heartLines.appendChild(span);
       msgIndex = Math.min(msgIndex + 1, messages.length-1);
 
-      // grow toward fullscreen based on FULL_AFTER steps (linear)
+      // grow toward FULL_AFTER steps (linear)
       const fw = window.innerWidth;
       const fh = window.innerHeight;
       const ratio = Math.min(nieClicks / FULL_AFTER, 1);
@@ -249,10 +332,9 @@ document.addEventListener("DOMContentLoaded", () => {
       takBtn.style.fontSize = Math.floor(Math.min(newW,newH) * 0.12) + "px";
       takBtn.style.transition = "width 220ms ease, height 220ms ease, font-size 220ms ease";
 
-      // small feedback for NIE
       nieBtn.animate([{transform:'translateY(0)'},{transform:'translateY(-8px)'},{transform:'translateY(0)'}], {duration:220, easing:'ease-out'});
 
-      // remove 'nie' after REMOVE_AFTER clicks but DO NOT stop growth
+      // remove 'nie' after REMOVE_AFTER clicks (7)
       if(nieClicks >= REMOVE_AFTER){
         if(nieBtn && nieBtn.parentNode){
           nieBtn.parentNode.removeChild(nieBtn);
@@ -281,12 +363,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // clicking TAK always triggers celebration
+    // clicking TAK always triggers celebration (and plays music)
     takBtn.addEventListener("click", ()=>{
       triggerCelebration();
     });
 
-    // handle resize to keep visual correctness
+    // handle resize
     window.addEventListener("resize", ()=>{
       if(takBtn.dataset.full === "1"){
         takBtn.style.width = "100vw";
@@ -310,6 +392,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const overlay = document.getElementById("overlay");
     const explosion = document.getElementById("explosion");
     const gif = document.getElementById("catsGif");
+
+    // play romantic music (user already interacted so play allowed)
+    try { romanceAudio.currentTime = 0; romanceAudio.play(); } catch(e){ /* ignore */ }
 
     explosion.innerHTML = "";
     overlay.classList.add("show");
@@ -369,17 +454,19 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(flash);
     setTimeout(()=> flash.remove(), 420);
 
+    // show main GIF centered, larger
     gif.classList.add("show");
     gif.style.width = Math.min(window.innerWidth * 0.9, 1200) + "px";
 
+    // close overlay when clicking outside GIF
     overlay.addEventListener("click",(e)=>{
       if(e.target === overlay){
         overlay.classList.remove("show");
         explosion.innerHTML = "";
         gif.classList.remove("show");
+        try { romanceAudio.pause(); romanceAudio.currentTime = 0; } catch(e){}
       }
     }, { once:true });
-
   }
 
   // ambient falling
